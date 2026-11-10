@@ -1,0 +1,121 @@
+package cl.karmamc.client;
+
+import java.math.BigDecimal;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/** Number parsing/formatting and lore-line parsers. Pure logic: input lines must already be format-stripped. */
+public final class Parse {
+	private Parse() {}
+
+	private static final String NUM = "([$+]?[0-9][0-9.,]*[kmb]?)";
+	private static final int FLAGS = Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE;
+	private static final Pattern NUMBER = Pattern.compile("([0-9][0-9.,]*?)([kmb])?", FLAGS);
+	private static final Pattern THOUSANDS = Pattern.compile("[0-9]{1,3}([.,][0-9]{3})+");
+
+	private static final Pattern INVEST = Pattern.compile("Ingreso:\\s*" + NUM, FLAGS);
+	private static final Pattern INVEST_LIMIT = Pattern.compile("Invertido:\\s*[$+]?[0-9][0-9.,]*[kmb]?\\s*/\\s*" + NUM, FLAGS);
+	private static final Pattern MINION = Pattern.compile("Dinero por segundo:\\s*" + NUM, FLAGS);
+	private static final Pattern GEMS = Pattern.compile("Ganas\\s+" + NUM + "\\s+Gemas\\s+cada\\s+60s", FLAGS);
+	private static final Pattern AURA = Pattern.compile(NUM + "\\s+Aura\\s+cada\\s+3\\s+horas", FLAGS);
+	private static final Pattern SOLD = Pattern.compile("Progreso:\\s*" + NUM + "\\s*/", FLAGS);
+	private static final Pattern SHOP_STEP = Pattern.compile("L[ií]mite de inversi[oó]n:\\s*" + NUM, FLAGS);
+	private static final Pattern SHOP_CAP = Pattern.compile("Tope del servidor:\\s*" + NUM, FLAGS);
+	private static final Pattern SHOP_PRICE = Pattern.compile("Precio:\\s*" + NUM + "\\s*Aura", FLAGS);
+	private static final Pattern SCOREBOARD_AURA = Pattern.compile("(?<![\\p{L}0-9])Aura:?\\s+" + NUM, FLAGS);
+
+	/**
+	 * Parses `$51.5M`, `1.5b`, `$26,000,000`, `$1.000.000`, `+721`, `7.82k`, `$721/s`.
+	 * With a k/m/b suffix `.`/`,` is decimal; without it, 3-digit groups are thousands separators.
+	 * Returns null when unparseable. BigDecimal keeps e.g. 51.5M exactly 51_500_000.
+	 */
+	public static Double number(String s) {
+		if (s == null) return null;
+		s = s.trim();
+		if (s.endsWith("/s")) s = s.substring(0, s.length() - 2);
+		while (!s.isEmpty() && (s.charAt(0) == '$' || s.charAt(0) == '+')) s = s.substring(1);
+		while (!s.isEmpty() && (s.endsWith(".") || s.endsWith(","))) s = s.substring(0, s.length() - 1);
+		Matcher m = NUMBER.matcher(s);
+		if (!m.matches()) return null;
+		String digits = m.group(1);
+		String suffix = m.group(2);
+		if (suffix == null && THOUSANDS.matcher(digits).matches()) {
+			digits = digits.replace(".", "").replace(",", "");
+		} else {
+			digits = digits.replace(',', '.');
+		}
+		BigDecimal v;
+		try {
+			v = new BigDecimal(digits);
+		} catch (NumberFormatException e) {
+			return null; // e.g. "1.2.3"
+		}
+		if (suffix != null) {
+			int exp = switch (Character.toLowerCase(suffix.charAt(0))) {
+				case 'k' -> 3;
+				case 'm' -> 6;
+				default -> 9;
+			};
+			v = v.scaleByPowerOfTen(exp);
+		}
+		return v.doubleValue();
+	}
+
+	/** `150.4k`, `1.5m`, `2b`, `721`: one decimal, `.0` dropped. */
+	public static String shortNumber(double v) {
+		return shortNumber(v, 1);
+	}
+
+	/** Same as {@link #shortNumber(double)} with up to `decimals` decimals, trailing zeros dropped (`1.98k`). */
+	public static String shortNumber(double v, int decimals) {
+		if (v < 0) return "-" + shortNumber(-v, decimals);
+		String[] suffixes = {"", "k", "m", "b"};
+		int i = 0;
+		BigDecimal scaled = round(v, decimals);
+		while (i < suffixes.length - 1 && scaled.compareTo(BigDecimal.valueOf(1000)) >= 0) {
+			i++;
+			scaled = round(v / Math.pow(1000, i), decimals);
+		}
+		return scaled.stripTrailingZeros().toPlainString() + suffixes[i];
+	}
+
+	private static BigDecimal round(double v, int decimals) {
+		return BigDecimal.valueOf(v).setScale(decimals, java.math.RoundingMode.HALF_UP);
+	}
+
+	private static Double find(Pattern p, String line) {
+		if (line == null) return null;
+		Matcher m = p.matcher(line);
+		return m.find() ? number(m.group(1)) : null;
+	}
+
+	/** `Ingreso: $721/s` -> 721 (money/s). */
+	public static Double invest(String line) { return find(INVEST, line); }
+
+	/** `Invertido: $51.5M/51.5M` -> right side (current limit). */
+	public static Double investLimit(String line) { return find(INVEST_LIMIT, line); }
+
+	/** `Dinero por segundo: $32` -> 32 (one minion). */
+	public static Double minion(String line) { return find(MINION, line); }
+
+	/** `Ganas 33 Gemas cada 60s` -> 33. */
+	public static Double gems(String line) { return find(GEMS, line); }
+
+	/** `1 Aura cada 3 horas` -> 1. */
+	public static Double aura(String line) { return find(AURA, line); }
+
+	/** `Progreso: $570.42m/1.5b (38.0%)` -> left side (total sold). */
+	public static Double sold(String line) { return find(SOLD, line); }
+
+	/** `Límite de inversión: +1.000.000` -> 1e6 (step per purchase). */
+	public static Double shopStep(String line) { return find(SHOP_STEP, line); }
+
+	/** `Tope del servidor: 320.000.000` -> 320e6. */
+	public static Double shopCap(String line) { return find(SHOP_CAP, line); }
+
+	/** `Precio: 30 Aura` -> 30. */
+	public static Double shopPrice(String line) { return find(SHOP_PRICE, line); }
+
+	/** Sidebar `Aura 18` -> 18. */
+	public static Double scoreboardAura(String line) { return find(SCOREBOARD_AURA, line); }
+}

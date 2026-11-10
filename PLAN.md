@@ -1,0 +1,101 @@
+# KarmaMC Client — Plan
+
+Mod client-side para el servidor KarmaMC. Fabric, Minecraft 26.2, Java 25, nombres oficiales Mojang.
+Mod id: `karmaclient`. Nombre: "KarmaMC Client". Paquete: `cl.karmamc.client`.
+Permitido por los admins: solo cálculo y visual. Nada que automatice clicks, envíe paquetes o dé ventaja física.
+
+## Decisiones
+- Todo en el HUD se muestra **por hora**.
+- Formato de números corto: `150.4k`, `1.5m`, `2.3b` (1 decimal, sin decimal si es entero).
+- HUD movible con pantalla de edición (comando `/karmaclient hud` y tecla configurable) arrastrando con mouse. Posición guardada en config.
+- Monedas modeladas: Dinero, Gemas, Aura, Puntos de Misión, Coins. Coins y Puntos de Misión no se usan en ningún módulo por ahora.
+- No se lee chat por ahora: el ingreso pasivo no se anuncia en chat.
+- Valores leídos se guardan en config para que el HUD funcione tras reiniciar sin reabrir menús.
+
+## Fuentes de datos (lectura de menús)
+El mod lee título de la pantalla de contenedor y nombre/lore de los ítems **solo de los slots del contenedor** (no el inventario del jugador). Quitar códigos de formato antes de comparar. Los ítems llegan después de abrir: re-escanear mientras la pantalla esté abierta.
+
+| Menú (título) | Línea de lore | Dato |
+|---|---|---|
+| `Inversiones` | `Ingreso: $721/s` | Dinero/s de invest |
+| `Bóveda de Minions` | `Dinero por segundo: $32` (un ítem por minion) | Suma = Dinero/s minions |
+| `Nivel de Gemas` | `Ganas 33 Gemas cada 60s` | Gemas/60s |
+| `Prestigio` | `1 Aura cada 3 horas` | Aura/3h (tentativo, ver abajo) |
+| `Mejora de Venta` | `Progreso: $570.42m/1.5b (38.0%)` | Total vendido = 570.42m |
+
+Ejemplos extra de números que deben parsear: `$51.5M`, `$1.28M`, `$570.42m`, `1.5b`, `$26,000,000`, `$1.000.000`, `$721`.
+Regla: con sufijo k/m/b (mayús. o minús.) el punto es decimal; sin sufijo, `.` y `,` en grupos de 3 son separadores de miles.
+
+### Aura (pendiente de validar)
+Nadie ha prestigiado aún, así que no sabemos cómo cambia el menú. Por ahora: se parsea `N Aura cada 3 horas` en `Prestigio`, pero la línea de Aura/h solo aparece si el usuario la activa con `/karmaclient aura on`. Cuando alguien prestigie, se manda captura y se ajusta.
+
+## Módulo 1 — HUD
+Líneas:
+- `Dinero: $X/h` = (invest/s + minions/s) × 3600
+- `Gemas: X/h` = gemas/60s × 60
+- `Aura: X/h` = aura/3h ÷ 3 (solo si activado)
+- `Spawners: $X/h` = resultado del Módulo 2, línea **separada** (no se suma al Dinero)
+
+Línea sin dato todavía: mostrar `?` y el menú a abrir (ej. `Gemas: ? (/gemslevel)`).
+
+## Módulo 2 — `/spawnersetup` (comando client-side)
+Pantalla con un campo de cantidad por tipo. Dinero/h base por spawner (sin multiplicador):
+
+| Tipo | Precio (gemas) | $/h base |
+|---|---|---|
+| Pollo | 400 | 3,200 |
+| Vaca | 500 | 4,000 |
+| Cerdo | 600 | 4,900 |
+| Blaze | 750 | 6,000 |
+| Esqueleto | 3,000 | 11,600 |
+| Creeper | 5,000 | 20,000 |
+| Golem | 5,500 | 26,000 |
+
+Total/h = Σ(cantidad × $/h base) × multiplicador actual de venta.
+Multiplicador actual = el mayor milestone ≤ total vendido (leído de `Mejora de Venta`). Bajo 10m = 1.0x.
+Milestones (solo estos, nada entremedio):
+10m→1.1x, 80m→1.2x, 120m→1.3x, 250m→1.4x, 1.5b→1.5x, 5b→1.6x, 7.5b→1.7x,
+10b→1.8x, 12.5b→1.9x, 17b→2.0x, 25b→2.5x, 75b→3.0x.
+Chequeo: 570.42m vendido → 1.4x (el menú muestra 1.5x como nivel *en progreso*).
+La pantalla muestra multiplicador usado, total/h, y sin multiplicador si no se ha leído el menú.
+
+## Módulo 3 — `/tokenprices` (comando client-side)
+Pantalla con 2 campos (mismo estilo que `/spawnersetup`), guardados en config:
+- Precio de 1k Gemas. Default `300k`.
+- Precio de 1 Aura. Default `200k`.
+Aceptan formato corto (`300k`, `1.5m`). Precio de Gemas solo se guarda; no se usa en cálculos aún.
+
+### Trade con impuesto
+`/trade` cobra 20% (redondeo hacia abajo) a lo que recibe el comprador. Escenario ideal: trades en múltiplos de 5 (5 enviadas → 4 recibidas).
+Para recibir N: comprar `5 × ceil(N / 4)`. Costo = cantidad comprada × precio unitario.
+Chequeo: N = 8.052 Aura → compra 10.065 → × $200k = $2.01b.
+
+## Módulo 4 — Invest Left (tooltip en Aurashop)
+Menú `Tienda de Aura`, ítem esmeralda `MEJORA DE INVERSIÓN`. Lore relevante:
+- `Límite de inversión: +1.000.000` → lo que suma cada compra.
+- `Tope del servidor: 320.000.000` → tope.
+- `Precio: 30 Aura` → Aura por compra.
+Límite actual = número de la derecha en `Inversiones` → `Invertido: $51.5M/51.5M` → 51.5M (guardar en config, campo nuevo `investLimit`).
+Aura actual = scoreboard lateral, línea `Aura 18` (leer del sidebar; quitar formato).
+
+Cálculo:
+- compras = ceil((tope − límite actual) / incremento); 0 si ya está en el tope.
+- auraTotal = compras × precio.
+- auraFalta = max(0, auraTotal − auraActual).
+- auraComprar = 5 × ceil(auraFalta / 4); costo = auraComprar × precio Aura (Módulo 3).
+Chequeo: 320M − 51.5M → 269 compras → 8.070 Aura; tiene 18 → faltan 8.052 → comprar 10.065 → $2.01b.
+
+Se agregan líneas al tooltip del ítem (solo cliente, solo en ese menú), ej.:
+`Faltan 269 mejoras (8,070 Aura)` / `Tienes 18 → faltan 8,052 Aura` / `Por /trade: 10,065 Aura ≈ $2b` (formato corto de 1 decimal: 2.013b → `2b`).
+Si falta un dato (límite o aura), decir qué abrir: `Abre /invest para calcular`.
+
+## Fases
+1. **Planificación** — hecho.
+2. **Esqueleto** — hecho.
+3. **Parsers y cálculos** — parseo de números, lectura de menús y scoreboard, tabla de multiplicadores, fórmula de trade, cálculo Invest Left; tests JUnit con los ejemplos y chequeos de este plan.
+4. **Módulo 1** — HUD + pantalla de edición arrastrable.
+5. **Módulos 2 y 3** — `/spawnersetup` y `/tokenprices`.
+6. **Módulo 4** — tooltip Invest Left.
+7. **Pulido y entrega** — prueba en servidor, jar final.
+
+Cada fase la construye un subagente; el líder audita (review + build + tests) antes de pasar a la siguiente.

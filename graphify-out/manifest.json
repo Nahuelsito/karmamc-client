@@ -1,0 +1,128 @@
+{
+  "build.gradle": {
+    "mtime": 1794266686.2382412,
+    "seen": 1794267339.08712,
+    "ast_hash": "dbbe24959fd149af7234878e71c905a0",
+    "semantic_hash": ""
+  },
+  "gradlew": {
+    "mtime": 1794264916.2316766,
+    "seen": 1794267339.08712,
+    "ast_hash": "a43be8432bac3ffd05b3769aa42fe996",
+    "semantic_hash": ""
+  },
+  "settings.gradle": {
+    "mtime": 1794264926.7733817,
+    "seen": 1794267339.08712,
+    "ast_hash": "f86d24419fd5ad0db175f27aa68302cb",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/Calc.java": {
+    "mtime": 1794267214.864525,
+    "seen": 1794267339.08712,
+    "ast_hash": "9343da01ddef64b7b491df331c3d8db0",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/Currency.java": {
+    "mtime": 1794264943.3250468,
+    "seen": 1794267339.08712,
+    "ast_hash": "f1f00427b5a2d775c33003f3ee6aa916",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/HudEditScreen.java": {
+    "mtime": 1794267234.2911396,
+    "seen": 1794267339.08712,
+    "ast_hash": "8c2c50516cdbd8fa6528233c135ad0a5",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/KarmaClient.java": {
+    "mtime": 1794270144.8518157,
+    "seen": 1794270225.0655947,
+    "ast_hash": "69e2ba28e2e4933bf01bd520bdeebe14",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/KarmaConfig.java": {
+    "mtime": 1794266679.5992508,
+    "seen": 1794267339.08712,
+    "ast_hash": "29685f4ee09d32562c180e7e63a4c366",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/KarmaHud.java": {
+    "mtime": 1794268197.6332922,
+    "seen": 1794268402.3506715,
+    "ast_hash": "89112b726e8629e6403400a2a640a41c",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/MenuReader.java": {
+    "mtime": 1794266790.2988656,
+    "seen": 1794267339.08712,
+    "ast_hash": "0f4ef5797a5e5a95a912757392c86956",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/Parse.java": {
+    "mtime": 1794268196.642606,
+    "seen": 1794268402.3506715,
+    "ast_hash": "356d2be5c5190f9acbadaca3904be69d",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/SidebarReader.java": {
+    "mtime": 1794266660.8958943,
+    "seen": 1794267339.08712,
+    "ast_hash": "958d52f5416a4d07dcea97fde5b14a1f",
+    "semantic_hash": ""
+  },
+  "src/main/resources/assets/karmaclient/lang/en_us.json": {
+    "mtime": 1794267234.3300388,
+    "seen": 1794267339.08712,
+    "ast_hash": "c9e8e6ea02195e0d19c0f8422528740c",
+    "semantic_hash": ""
+  },
+  "src/main/resources/fabric.mod.json": {
+    "mtime": 1794264926.9020426,
+    "seen": 1794267339.08712,
+    "ast_hash": "788b6f1e7ec794fc4faa859ff5c6ea66",
+    "semantic_hash": ""
+  },
+  "src/test/java/cl/karmamc/client/CalcTest.java": {
+    "mtime": 1794267214.8660321,
+    "seen": 1794267339.08712,
+    "ast_hash": "800d2b726b4e9315dbccee3558cd56a4",
+    "semantic_hash": ""
+  },
+  "src/test/java/cl/karmamc/client/ParseTest.java": {
+    "mtime": 1794268198.769594,
+    "seen": 1794268402.3506715,
+    "ast_hash": "c0afeece9f7318fbe28d3613fd281a69",
+    "semantic_hash": ""
+  },
+  "PLAN.md": {
+    "mtime": 1794266801.7026522,
+    "seen": 1794267339.08712,
+    "ast_hash": "eb82bb5690f5ffdad5f456362d7b27d7",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/SpawnerSetupScreen.java": {
+    "mtime": 1794269692.2335055,
+    "seen": 1794270225.0655947,
+    "ast_hash": "ca8dd51bc7a4f14eab8858771b676f7e",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/TokenPricesScreen.java": {
+    "mtime": 1794268343.4702187,
+    "seen": 1794268402.3506715,
+    "ast_hash": "09b4c4c9d5af643d9f880e23d688ebb0",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/InvestTooltip.java": {
+    "mtime": 1794270143.9152846,
+    "seen": 1794270225.0644925,
+    "ast_hash": "66b75a4c1e3e1e59a54899f94f9e1195",
+    "semantic_hash": ""
+  },
+  "src/test/java/cl/karmamc/client/InvestTooltipTest.java": {
+    "mtime": 1794270145.753307,
+    "seen": 1794270225.0655947,
+    "ast_hash": "b4dcc05e894407a030c564746883ef4a",
+    "semantic_hash": ""
+  }
+}

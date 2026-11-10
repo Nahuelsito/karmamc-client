@@ -56,7 +56,10 @@ public class KarmaClient implements ClientModInitializer {
 			}
 		});
 
-		ClientPlayConnectionEvents.DISCONNECT.register((handler, mc) -> AfkSession.onDisconnect(mc));
+		ClientPlayConnectionEvents.DISCONNECT.register((handler, mc) -> {
+			AfkSession.onDisconnect(mc);
+			SidebarReader.onDisconnect();
+		});
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
 			// All mod commands live under /fish.
@@ -103,8 +106,8 @@ public class KarmaClient implements ClientModInitializer {
 			return 0;
 		}
 		KarmaConfig c = config;
-		for (String line : AfkCalc.lines(input.trim().toLowerCase(Locale.ROOT), seconds, c.investPerSecond, c.minionsPerSecond,
-				c.gemsPer60s, c.showAura, c.auraPer3h, c.spawners, c.totalSold))
+		for (String line : AfkCalc.lines(input.trim().toLowerCase(Locale.ROOT), seconds, SidebarReader.effectiveInvest(), c.minionsPerSecond,
+				SidebarReader.effectiveGemsPerPayout(), SidebarReader.GEM_INTERVAL.interval(), c.showAura, c.auraPer3h, c.spawners, c.totalSold))
 			ctx.getSource().sendFeedback(Component.literal(line));
 		return 1;
 	}

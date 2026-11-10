@@ -156,4 +156,33 @@ class ParseTest {
 			assertNull(Parse.duration(bad), bad);
 		assertNull(Parse.duration(null));
 	}
+
+	@Test
+	void scoreboardInvestAndGemsCountdown() {
+		assertEquals(749.0, Parse.scoreboardInvest("Inversión $749/s"));
+		assertEquals(749.0, Parse.scoreboardInvest("Inversion: $749/s"));
+		assertEquals(1500.0, Parse.scoreboardInvest(" ❙ Inversión $1.5k/s "));
+		assertNull(Parse.scoreboardInvest("MejoraInversión $749/s"));
+		assertNull(Parse.scoreboardInvest("Aura 18"));
+		assertEquals(35, Parse.scoreboardGemsCountdown("Gemas 19.1k (35s)"));
+		assertEquals(0, Parse.scoreboardGemsCountdown(" ❙ Gemas: 120 (0s)"));
+		assertNull(Parse.scoreboardGemsCountdown("Gemas 19.1k"));
+		assertNull(Parse.scoreboardGemsCountdown("Inversión $749/s"));
+	}
+
+	@Test
+	void serverRankAndPass() {
+		assertEquals("Venom", Parse.serverRank("VENOM Catfish69"));
+		assertFalse(Parse.hasPremiumPass("VENOM Catfish69"));
+		assertEquals("Karma+", Parse.serverRank("KARMA+ Foo ★"));
+		assertTrue(Parse.hasPremiumPass("KARMA+ Foo ★"));
+		assertTrue(Parse.hasPremiumPass("ABYSS Foo ⭐"));
+		assertEquals("Karma", Parse.serverRank("KARMA Foo"));
+		assertEquals("Abyss", Parse.serverRank("abyss Foo"));
+		assertNull(Parse.serverRank("+ dino1234"));
+		assertNull(Parse.serverRank("+ Venomous"));
+		assertNull(Parse.serverRank("+ xCobra"));
+		assertNull(Parse.serverRank("+ Hydra_99"));
+		assertNull(Parse.serverRank(null));
+	}
 }

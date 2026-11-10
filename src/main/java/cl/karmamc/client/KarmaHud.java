@@ -16,10 +16,13 @@ public final class KarmaHud {
 	public static List<String> lines() {
 		KarmaConfig c = KarmaClient.config;
 		List<String> out = new ArrayList<>();
-		out.add(c.investPerSecond == null && c.minionsPerSecond == null
+		Double invest = SidebarReader.effectiveInvest();
+		Double gems = SidebarReader.effectiveGemsPerPayout();
+		out.add(invest == null && c.minionsPerSecond == null
 				? "Dinero: ? (/invest, minions)"
-				: "Dinero: $" + Parse.shortNumber((orZero(c.investPerSecond) + orZero(c.minionsPerSecond)) * 3600) + "/h");
-		out.add(c.gemsPer60s == null ? "Gemas: ? (/gemslevel)" : "Gemas: " + Parse.shortNumber(c.gemsPer60s * 60, 2) + "/h");
+				: "Dinero: $" + Parse.shortNumber((orZero(invest) + orZero(c.minionsPerSecond)) * 3600) + "/h");
+		out.add(gems == null ? "Gemas: ? (/gemslevel)"
+				: "Gemas: " + Parse.shortNumber(gems * 3600 / SidebarReader.GEM_INTERVAL.interval(), 2) + "/h");
 		if (c.showAura) out.add(c.auraPer3h == null ? "Aura: ? (/prestige)" : "Aura: " + Parse.shortNumber(c.auraPer3h / 3) + "/h");
 		if (c.spawners.values().stream().anyMatch(n -> n != null && n > 0))
 			out.add("Spawners: $" + Parse.shortNumber(Calc.spawnersPerHour(c.spawners, orZero(c.totalSold))) + "/h");

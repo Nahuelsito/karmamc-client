@@ -148,3 +148,10 @@ Cada fase la construye un subagente; el líder audita (review + build + tests) a
 
 ## v1.1.3
 - `/fish afk` (calcular, HUD y resumen): la línea de dinero se separa en `Invest: $X` y `Minions: $X`, ambas verdes. Orden: AFK {tiempo}, Invest, Minions, Gemas, Spawners (si hay), Aura (si está activada). Dato faltante → `Invest: ? (abre /invest)` / `Minions: ? (abre la bóveda de minions)`.
+
+## v1.1.4
+- Multiplicador oculto de gemas por rango de servidor (leído de la propia entrada del TAB) y pase premium (estrella `★` en el TAB). Aditivo: Cobra +15%, Venom +25%, Vyper +35%, Mamba +50%, Hydra +70%, Karma +90%, Karma+ +120%, pase +25%. Abyss multiplica: ×3 × (1 + pase).
+- Intervalo de gemas leído del contador del scoreboard `Gemas 19.1k (35s)`: tras cada reinicio, valor > 40 → 60 s, si no → 40 s (outpost). Por defecto 60 s.
+- Invest/s se lee de `Inversión $749/s` del scoreboard (incluye outposts); si falta, se usa el valor de /invest.
+- HUD por hora, `/fish afk calcular` y la sesión AFK usan: invest del scoreboard, gemas = base /gemslevel × multiplicador cada intervalo.
+- El "+Xm en invest" del rango ya viene incluido en el límite leído del servidor: sin cambios en Invest Left.

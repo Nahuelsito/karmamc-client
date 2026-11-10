@@ -54,4 +54,21 @@ public final class Calc {
 		long n = Math.max(0, GEMS_MAX_LEVEL - level);
 		return n * cost + step * n * (n - 1) / 2;
 	}
+
+	/** Hidden gem multiplier: 1 + rank% + pass 25%, except Abyss which is ×3 on top (Abyss + pass = 3.75). Unknown/null rank = no rank bonus. */
+	public static double gemsMultiplier(String rank, boolean pass) {
+		double p = pass ? 0.25 : 0;
+		if ("Abyss".equals(rank)) return 3 * (1 + p);
+		double r = rank == null ? 0 : switch (rank) {
+			case "Cobra" -> 0.15;
+			case "Venom" -> 0.25;
+			case "Vyper" -> 0.35;
+			case "Mamba" -> 0.50;
+			case "Hydra" -> 0.70;
+			case "Karma" -> 0.90;
+			case "Karma+" -> 1.20;
+			default -> 0;
+		};
+		return 1 + r + p;
+	}
 }

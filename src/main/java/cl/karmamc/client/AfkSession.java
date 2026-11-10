@@ -151,7 +151,8 @@ public final class AfkSession {
 
 	private static List<String> lines(String label, double seconds) {
 		KarmaConfig c = KarmaClient.config;
-		return AfkCalc.lines(label, seconds, c.investPerSecond, c.minionsPerSecond, c.gemsPer60s, c.showAura, c.auraPer3h,
+		return AfkCalc.lines(label, seconds, SidebarReader.effectiveInvest(), c.minionsPerSecond,
+				SidebarReader.effectiveGemsPerPayout(), SidebarReader.GEM_INTERVAL.interval(), c.showAura, c.auraPer3h,
 				c.spawners, c.totalSold);
 	}
 

@@ -36,9 +36,9 @@
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/KarmaClient.java": {
-    "mtime": 1794277069.7275202,
-    "seen": 1794277128.4237936,
-    "ast_hash": "62804f266c69888615a9f2cb1846f5b5",
+    "mtime": 1794277293.8290882,
+    "seen": 1794277386.149181,
+    "ast_hash": "138432d96b8761ae5cbd02e2264830fe",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/KarmaConfig.java": {
@@ -48,9 +48,9 @@
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/KarmaHud.java": {
-    "mtime": 1794268197.6332922,
-    "seen": 1794268402.3506715,
-    "ast_hash": "89112b726e8629e6403400a2a640a41c",
+    "mtime": 1794277293.8300953,
+    "seen": 1794277386.149181,
+    "ast_hash": "5c82447f2f2fdb904cf8cc58afe6d3ff",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/MenuReader.java": {
@@ -96,9 +96,9 @@
     "semantic_hash": ""
   },
   "PLAN.md": {
-    "mtime": 1794277112.8361058,
-    "seen": 1794277128.4237936,
-    "ast_hash": "030c9b2c4cb9c008fd7345bf8a985f47",
+    "mtime": 1794277324.5985944,
+    "seen": 1794277386.149181,
+    "ast_hash": "6c0be5cc24aa776e181e5dee8f4b93d8",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/SpawnerSetupScreen.java": {
@@ -159,6 +159,24 @@
     "mtime": 1794277091.6699646,
     "seen": 1794277128.4237936,
     "ast_hash": "7bf51c2dbfc91acadcf020905b04deed",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/AfkActivity.java": {
+    "mtime": 1794277257.6034803,
+    "seen": 1794277386.149181,
+    "ast_hash": "284c810d210b4da110e35066d80d8bd5",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/AfkSession.java": {
+    "mtime": 1794277278.7671578,
+    "seen": 1794277386.149181,
+    "ast_hash": "818393fb748b81b50d74ae1b17dbf566",
+    "semantic_hash": ""
+  },
+  "src/test/java/cl/karmamc/client/AfkActivityTest.java": {
+    "mtime": 1794277311.3712769,
+    "seen": 1794277386.149181,
+    "ast_hash": "6b259c14fb51cabd4f364645fa6d3a12",
     "semantic_hash": ""
   }
 }

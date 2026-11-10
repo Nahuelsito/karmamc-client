@@ -125,4 +125,14 @@ Cada fase la construye un subagente; el líder audita (review + build + tests) a
 ## v1.1.1
 - **Tooltip en la Tienda de Gemas** (`/gemshop`, menú `Tienda de Gemas`). En cualquier ítem cuyo lore tenga `Precio: N Gemas` (ej. `GENERADOR BLAZE [CLICK]`: `❙ Gana unos $6.000 por hora`, `❙ Precio: 750 Gemas`, `❙ Comprado: 3.21k veces`) se agrega: línea en blanco, encabezado dorado `Catfish69 QoL for KarmaMC` y `Compras X por hora con tu /gemslevel`, con X = (gemas/60s × 60) / precio (formato corto, 2 decimales). Sin gemas/60s leído → `Abre /gemslevel para calcular`. Solo visual, solo en ese menú.
   - Chequeo: 33 gemas/60s → 1.980/h; precio 750 → `Compras 2.64 por hora con tu /gemslevel`.
-- **Renombre del calculador AFK**: `/fish afk <tiempo>` pasa a `/fish afk calcular <tiempo>`; la forma corta deja de existir. `/fish afk calcular` sin tiempo → mensaje rojo de uso (`Ej: /fish afk calcular 1.5h`). `/fish afk` solo no hace nada por ahora (fase B agrega `start`/`stop`).
+- **Renombre del calculador AFK**: `/fish afk <tiempo>` pasa a `/fish afk calcular <tiempo>`; la forma corta deja de existir. `/fish afk calcular` sin tiempo → mensaje rojo de uso (`Ej: /fish afk calcular 1.5h`). `/fish afk` solo no hace nada.
+- **Sesión AFK** (`/fish afk start` / `/fish afk stop`). Solo visual/estimación: no envía paquetes, no mueve ni hace clicks.
+  - `start` inicia la sesión (si ya hay una: aviso amarillo). `stop` la termina (si no hay: aviso amarillo).
+  - Mientras está activa, el HUD agrega debajo de sus líneas `AFK 01:23:05` (tiempo transcurrido, se actualiza cada segundo) y las mismas líneas y colores que `/fish afk calcular` para ese tiempo (dinero, gemas, spawners si hay, aura si `/fish aura on`), recalculadas cada 2 s.
+  - Al terminar (comando o auto-stop): desaparece la sección del HUD, el chat muestra `Catfish69 QoL for KarmaMC — AFK terminado <tiempo>` (dorado) + las líneas de `calcular`, y suena el level-up del jugador (solo local).
+  - Auto-stop por actividad (se ignora todo durante los primeros 2 s tras `start`):
+    - **Eventos**: nueva pulsación de atacar/usar, de una tecla de movimiento (adelante/atrás/izq/der) o sprint; abrir cualquier pantalla (transición sin pantalla → pantalla); empezar a mover la cámara (>1° en un tick tras ≥0.5 s quieta: un barrido largo cuenta como 1 evento).
+    - **Regla A**: 5 o más eventos en cualquier ventana de 10 s → stop.
+    - **Regla B**: 10 s de actividad continua → stop. Tick activo = tecla de movimiento/sprint mantenida o cámara movida (>1°). Una pausa de más de 1 s reinicia el conteo.
+    - No cuentan nunca: saltar o agacharse (pulsar o mantener), mantener atacar/usar (solo la pulsación inicial cuenta).
+  - Desconexión o cambio de modalidad (nuevo mundo): la sesión termina y el resumen (+ sonido) se muestra al estar en el siguiente mundo.

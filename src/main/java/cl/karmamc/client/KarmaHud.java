@@ -23,6 +23,7 @@ public final class KarmaHud {
 		if (c.showAura) out.add(c.auraPer3h == null ? "Aura: ? (/prestige)" : "Aura: " + Parse.shortNumber(c.auraPer3h / 3) + "/h");
 		if (c.spawners.values().stream().anyMatch(n -> n != null && n > 0))
 			out.add("Spawners: $" + Parse.shortNumber(Calc.spawnersPerHour(c.spawners, orZero(c.totalSold))) + "/h");
+		out.addAll(AfkSession.hudLines());
 		return out;
 	}
 

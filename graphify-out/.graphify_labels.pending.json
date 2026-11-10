@@ -5,14 +5,16 @@
   "3": "MenuReader.java",
   "4": ".shortNumber",
   "5": "HudEditScreen",
-  "6": ".strip",
+  "6": "SidebarReader.java",
   "7": "KarmaMC Client — Plan",
-  "8": "org.junit.jupiter.api.Test",
+  "8": ".lines",
   "9": "Currency",
   "10": "gradlew",
   "11": "build.gradle",
   "12": "settings.gradle",
   "13": "TokenPricesScreen",
-  "14": "org.junit.jupiter.api.Test",
-  "15": ".lines"
+  "14": ".onInitializeClient",
+  "15": "org.junit.jupiter.api.Test",
+  "16": "KarmaConfig.java",
+  "17": ".lines"
 }

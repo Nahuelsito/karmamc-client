@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -45,12 +46,15 @@ public class KarmaClient implements ClientModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(mc -> {
 			MenuReader.tick(mc);
 			SidebarReader.tick(mc);
+			AfkSession.tick(mc);
 			while (hudKey.consumeClick()) pendingScreen = new HudEditScreen();
 			if (pendingScreen != null) {
 				mc.gui.setScreen(pendingScreen);
 				pendingScreen = null;
 			}
 		});
+
+		ClientPlayConnectionEvents.DISCONNECT.register((handler, mc) -> AfkSession.onDisconnect(mc));
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
 			// All mod commands live under /fish.
@@ -61,13 +65,19 @@ public class KarmaClient implements ClientModInitializer {
 								.then(literal("off").executes(ctx -> setAura(ctx, false))))
 						.then(literal("spawnersetup").executes(ctx -> open(new SpawnerSetupScreen())))
 						.then(literal("tokenprices").executes(ctx -> open(new TokenPricesScreen())))
-						// Phase B (v1.1.1): add literal("start") / literal("stop") children here; /fish afk has no executes yet.
 						.then(literal("afk")
+								.then(literal("start").executes(ctx -> reply(ctx, AfkSession.start(ctx.getSource().getClient()))))
+								.then(literal("stop").executes(ctx -> reply(ctx, AfkSession.stop(ctx.getSource().getClient()))))
 								.then(literal("calcular")
 										.executes(ctx -> afk(ctx, null))
 										.then(argument("tiempo", StringArgumentType.greedyString())
 												.executes(ctx -> afk(ctx, StringArgumentType.getString(ctx, "tiempo")))))));
 		});
+	}
+
+	private static int reply(CommandContext<FabricClientCommandSource> ctx, String message) {
+		if (message != null) ctx.getSource().sendFeedback(Component.literal(message));
+		return 1;
 	}
 
 	private static int open(Screen screen) {

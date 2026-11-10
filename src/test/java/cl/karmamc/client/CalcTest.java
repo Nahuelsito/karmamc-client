@@ -65,4 +65,13 @@ class CalcTest {
 		assertEquals(32_400 * 1.4, Calc.spawnersPerHour(Map.of("pollo", 2, "golem", 1, "dragon", 5), 570.42e6), 1e-6);
 		assertEquals(4_000, Calc.spawnersPerHour(Map.of("vaca", 1), 0));
 	}
+
+	@Test
+	void gemsLeft() {
+		// n = 75: 75×26m + 1m×75×74/2 = 1.95b + 2.775b
+		assertEquals(4_725_000_000.0, Calc.gemsLeft(25, 26e6, 1e6));
+		assertEquals(100e6, Calc.gemsLeft(99, 100e6, 1e6));
+		assertEquals(0, Calc.gemsLeft(100, 101e6, 1e6));
+		assertEquals(0, Calc.gemsLeft(120, 121e6, 1e6));
+	}
 }

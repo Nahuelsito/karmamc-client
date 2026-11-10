@@ -22,6 +22,9 @@ public final class Parse {
 	private static final Pattern SHOP_STEP = Pattern.compile("L[ií]mite de inversi[oó]n:\\s*" + NUM, FLAGS);
 	private static final Pattern SHOP_CAP = Pattern.compile("Tope del servidor:\\s*" + NUM, FLAGS);
 	private static final Pattern SHOP_PRICE = Pattern.compile("Precio:\\s*" + NUM + "\\s*Aura", FLAGS);
+	private static final Pattern GEMS_LEVEL = Pattern.compile("Tu nivel ahora:\\s*" + NUM, FLAGS);
+	private static final Pattern GEMS_NEXT_COST = Pattern.compile("Nivel\\s+[0-9]+:\\s*cuesta\\s+" + NUM, FLAGS);
+	private static final Pattern GEMS_STEP = Pattern.compile("Cada nivel cuesta\\s+" + NUM + "\\s+m[aá]s", FLAGS);
 	// Anchored at "[!]" so a player typing the same text in chat (prefixed by rank/name) does not match.
 	private static final Pattern INVEST_UPGRADE_BOUGHT = Pattern.compile("^\\[!]\\s*¡?Compraste MEJORA DE INVERSI[OÓ]N.*\\spor\\s+[0-9.,]+\\s+Aura!?$", FLAGS);
 	private static final Pattern SCOREBOARD_AURA =Pattern.compile("(?<![\\p{L}0-9])Aura:?\\s+" + NUM, FLAGS);
@@ -117,6 +120,15 @@ public final class Parse {
 
 	/** `Precio: 30 Aura` -> 30. */
 	public static Double shopPrice(String line) { return find(SHOP_PRICE, line); }
+
+	/** `❙ Tu nivel ahora: 25` -> 25 (gems level). */
+	public static Double gemsLevel(String line) { return find(GEMS_LEVEL, line); }
+
+	/** `❙ Nivel 26: cuesta $26,000,000` -> 26e6 (cost of the next gems level). */
+	public static Double gemsNextCost(String line) { return find(GEMS_NEXT_COST, line); }
+
+	/** `(!) Cada nivel cuesta $1.000.000 mas que el anterior.` -> 1e6 (cost increase per level). */
+	public static Double gemsStep(String line) { return find(GEMS_STEP, line); }
 
 	/** Chat `[!] ¡Compraste MEJORA DE INVERSIÓN [ᴄʟɪᴄᴋ] por 30 Aura!` -> true. */
 	public static boolean investUpgradeBought(String line) {

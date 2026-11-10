@@ -99,3 +99,9 @@ Si falta un dato (límite o aura), decir qué abrir: `Abre /invest para calcular
 7. **Pulido y entrega** — prueba en servidor, jar final.
 
 Cada fase la construye un subagente; el líder audita (review + build + tests) antes de pasar a la siguiente.
+
+## v1.0.2 — Gemas hasta nivel 100 (tooltip)
+Ítem estrella del menú `/gemslevel` (`NIVEL DE GEMS [CLICK]`). Se activa en cualquier ítem cuyo lore tenga `Tu nivel ahora:`; todo se lee del lore del ítem (sin config):
+- `Tu nivel ahora: 25` → nivel L. `Nivel 26: cuesta $26,000,000` → costo C del siguiente. `Cada nivel cuesta $1.000.000 mas que el anterior.` → paso S.
+- n = 100 − L; total = n×C + S×n(n−1)/2. Chequeo: L=25 → 75 niveles → $4.725b (`Cuesta $4.73b`).
+- L ≥ 100 → `Nivel máximo (100)`. Falta un dato → no se agrega nada.

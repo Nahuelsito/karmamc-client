@@ -1,9 +1,9 @@
 {
-  "0": "org.junit.jupiter.api.Test",
+  "0": "KarmaConfig.java",
   "1": "KarmaClient.java",
   "2": "Parse",
   "3": "MenuReader.java",
-  "4": "KarmaHud",
+  "4": ".lines",
   "5": "HudEditScreen",
   "6": ".tick",
   "7": "KarmaMC Client — Plan",

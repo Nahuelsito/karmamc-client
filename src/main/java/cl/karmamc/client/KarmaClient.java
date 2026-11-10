@@ -33,6 +33,7 @@ public class KarmaClient implements ClientModInitializer {
 		HudElementRegistry.addLast(Identifier.fromNamespaceAndPath(MOD_ID, "hud"),
 				(g, delta) -> KarmaHud.extract(g, Minecraft.getInstance()));
 		InvestTooltip.register();
+		GemsTooltip.register();
 		ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
 			if (Parse.investUpgradeBought(MenuReader.strip(message))) onInvestUpgradeBought();
 		});

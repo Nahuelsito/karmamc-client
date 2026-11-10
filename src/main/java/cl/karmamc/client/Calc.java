@@ -46,4 +46,12 @@ public final class Calc {
 		long buy = tradeBuy(missing);
 		return new InvestLeft(purchases, total, missing, buy, buy * auraPrice);
 	}
+
+	public static final int GEMS_MAX_LEVEL = 100;
+
+	/** Money to go from gems level `level` to 100: n×cost + step×n(n−1)/2, cost = price of level+1; 0 at max. */
+	public static double gemsLeft(long level, double cost, double step) {
+		long n = Math.max(0, GEMS_MAX_LEVEL - level);
+		return n * cost + step * n * (n - 1) / 2;
+	}
 }

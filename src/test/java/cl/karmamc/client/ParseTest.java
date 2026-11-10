@@ -103,4 +103,14 @@ class ParseTest {
 		assertNull(Parse.scoreboardAura("Gemas 33"));
 		assertNull(Parse.scoreboardAura("1 Aura cada 3 horas"));
 	}
+
+	@Test
+	void gemsLevelLines() {
+		assertEquals(25.0, Parse.gemsLevel("❙ Tu nivel ahora: 25"));
+		assertEquals(26_000_000.0, Parse.gemsNextCost("❙ Nivel 26: cuesta $26,000,000"));
+		assertEquals(1_000_000.0, Parse.gemsStep("(!) Cada nivel cuesta $1.000.000 mas que el anterior."));
+		assertNull(Parse.gemsLevel("❙ Ganas 33 Gemas cada 60s"));
+		assertNull(Parse.gemsNextCost("❙ Tu nivel ahora: 25"));
+		assertNull(Parse.gemsStep("❙ Nivel 26: cuesta $26,000,000"));
+	}
 }

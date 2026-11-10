@@ -43,6 +43,18 @@ class ParseTest {
 		assertNull(Parse.number(null));
 	}
 
+	@Test
+	void numberOverflowIsNull() {
+		assertNull(Parse.number("9".repeat(400)));
+		assertNull(Parse.number("9".repeat(400) + "b"));
+	}
+
+	@Test
+	void shortNumberNotFinite() {
+		assertEquals("?", Parse.shortNumber(Double.POSITIVE_INFINITY));
+		assertEquals("?", Parse.shortNumber(Double.NaN, 2));
+	}
+
 	@ParameterizedTest
 	@CsvSource(delimiter = '|', value = {
 			"150400|150.4k",

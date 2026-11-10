@@ -63,7 +63,8 @@ public final class Parse {
 			};
 			v = v.scaleByPowerOfTen(exp);
 		}
-		return v.doubleValue();
+		double d = v.doubleValue();
+		return Double.isFinite(d) ? d : null;
 	}
 
 	/** `150.4k`, `1.5m`, `2b`, `721`: one decimal, `.0` dropped. */
@@ -73,6 +74,7 @@ public final class Parse {
 
 	/** Same as {@link #shortNumber(double)} with up to `decimals` decimals, trailing zeros dropped (`1.98k`). */
 	public static String shortNumber(double v, int decimals) {
+		if (!Double.isFinite(v)) return "?";
 		if (v < 0) return "-" + shortNumber(-v, decimals);
 		String[] suffixes = {"", "k", "m", "b"};
 		int i = 0;

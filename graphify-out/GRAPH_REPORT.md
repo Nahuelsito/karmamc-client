@@ -1,24 +1,26 @@
 # Graph Report - karma client  (2026-11-09)
 
 ## Corpus Check
-- 23 files · ~7,550 words
+- 25 files · ~8,213 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: .properties 2, (none) 1, .jar 1)
 
 ## Summary
-- 222 nodes · 444 edges · 15 communities (3 shown, 12 thin omitted)
+- 238 nodes · 487 edges · 15 communities (3 shown, 12 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ce0ccad3`
+- Built from commit: `e83f1c75`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
+- .onInitializeClient
 - KarmaClient.java
 - Parse
-- .lines
+- MenuReader.java
+- .shortNumber
 - HudEditScreen
 - .tick
 - KarmaMC Client — Plan
@@ -28,13 +30,13 @@
 - org.junit.jupiter.api.Test
 
 ## God Nodes (most connected - your core abstractions)
-1. `Parse` - 21 edges
-2. `ParseTest` - 12 edges
-3. `SpawnerSetupScreen` - 10 edges
-4. `TokenPricesScreen` - 10 edges
-5. `Catfish69 QoL for KarmaMC — Plan` - 10 edges
-6. `HudEditScreen` - 9 edges
-7. `KarmaClient` - 9 edges
+1. `Parse` - 22 edges
+2. `ParseTest` - 13 edges
+3. `KarmaClient` - 10 edges
+4. `SpawnerSetupScreen` - 10 edges
+5. `TokenPricesScreen` - 10 edges
+6. `Catfish69 QoL for KarmaMC — Plan` - 10 edges
+7. `HudEditScreen` - 9 edges
 8. `Calc` - 8 edges
 9. `KarmaHud` - 8 edges
 10. `CalcTest` - 8 edges
@@ -57,26 +59,28 @@ Cohesion: 0.29
 Nodes (6): Currency, AURA, COINS, GEMS, MISSION_POINTS, MONEY
 
 ### Community 14 - "org.junit.jupiter.api.Test"
-Cohesion: 0.14
-Nodes (4): Calc, InvestLeft, CalcTest, ParseTest
+Cohesion: 0.15
+Nodes (5): Calc, InvestLeft, InvestTooltip, CalcTest, InvestTooltipTest
 
 ## Knowledge Gaps
 - **5 isolated node(s):** `MONEY`, `GEMS`, `AURA`, `MISSION_POINTS`, `COINS`
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 59 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 62 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Parse` connect `Parse` to `KarmaClient.java`, `org.junit.jupiter.api.Test`?**
-  _High betweenness centrality (0.094) - this node is a cross-community bridge._
+- **Why does `Parse` connect `Parse` to `KarmaClient.java`, `.shortNumber`?**
+  _High betweenness centrality (0.092) - this node is a cross-community bridge._
 - **What connects `MONEY`, `GEMS`, `AURA` to the rest of the system?**
   _5 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `.onInitializeClient` be split into smaller, more focused modules?**
+  _Cohesion score 0.12318840579710146 - nodes in this community are weakly interconnected._
+- **Why does `KarmaClient` connect `KarmaClient.java` to `.onInitializeClient`?**
+  _High betweenness centrality (0.063) - this node is a cross-community bridge._
 - **Should `KarmaClient.java` be split into smaller, more focused modules?**
-  _Cohesion score 0.11076923076923077 - nodes in this community are weakly interconnected._
-- **Why does `SpawnerSetupScreen` connect `TokenPricesScreen` to `KarmaConfig.java`, `KarmaClient.java`?**
-  _High betweenness centrality (0.049) - this node is a cross-community bridge._
-- **Should `.tick` be split into smaller, more focused modules?**
-  _Cohesion score 0.14619883040935672 - nodes in this community are weakly interconnected._
-- **Should `org.junit.jupiter.api.Test` be split into smaller, more focused modules?**
-  _Cohesion score 0.14112903225806453 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0907258064516129 - nodes in this community are weakly interconnected._
+- **Why does `HudEditScreen` connect `HudEditScreen` to `KarmaClient.java`?**
+  _High betweenness centrality (0.044) - this node is a cross-community bridge._
+- **Should `MenuReader.java` be split into smaller, more focused modules?**
+  _Cohesion score 0.1471861471861472 - nodes in this community are weakly interconnected._

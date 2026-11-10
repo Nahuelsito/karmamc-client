@@ -1,9 +1,9 @@
 {
-  "0": "KarmaConfig.java",
+  "0": ".onInitializeClient",
   "1": "KarmaClient.java",
   "2": "Parse",
   "3": "MenuReader.java",
-  "4": ".lines",
+  "4": ".shortNumber",
   "5": "HudEditScreen",
   "6": ".tick",
   "7": "KarmaMC Client — Plan",

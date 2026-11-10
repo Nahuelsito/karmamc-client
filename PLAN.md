@@ -114,5 +114,10 @@ Cada fase la construye un subagente; el líder audita (review + build + tests) a
   - `/fish aura on|off` — mostrar/ocultar Aura/h en el HUD.
   - `/fish spawnersetup` — Módulo 2.
   - `/fish tokenprices` — Módulo 3.
-  - `/fish afk` — reservado (fase B).
+  - `/fish afk <tiempo>` — fase B: imprime en el chat (solo cliente) cuánto rinde cada moneda pasiva en ese tiempo. Tiempo: número con hasta 2 decimales + una unidad `s`/`m`/`h`/`d` (sin distinguir mayúsculas), p. ej. `1h`, `90m`, `1.5d`; inválido o sin argumento → mensaje rojo de uso. Cálculo proporcional (promedios, no intervalos completos), mismos datos que el HUD:
+    - Dinero (verde) = (invest/s + minions/s) × segundos.
+    - Gemas (rosa) = gemas/60s × segundos/60.
+    - Spawners (verde, solo si hay alguno) = spawners/h × segundos/3600.
+    - Aura (rojo, solo si `/fish aura on`) = aura/3h × segundos/10800.
+    - Ej.: invest 14 $/s + 1 minion 14 $/s, 1 blaze, gemas nivel 1 (1/60s), `/fish afk 1h` → `Dinero (invest + minions): $100.8k`, `Gemas: 60`, `Spawners: $6k`.
 - Los comandos del servidor (`/invest`, `/gemslevel`, `/prestige`, `/trade`) no cambian.

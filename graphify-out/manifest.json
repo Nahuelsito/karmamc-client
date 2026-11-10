@@ -36,9 +36,9 @@
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/KarmaClient.java": {
-    "mtime": 1794275250.8050106,
-    "seen": 1794275278.8501809,
-    "ast_hash": "c5283314926f19dc3769ff43bba754b4",
+    "mtime": 1794275398.0530066,
+    "seen": 1794275566.67024,
+    "ast_hash": "2c05f0453db78d784a2d5f0ab9264e1d",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/KarmaConfig.java": {
@@ -60,9 +60,9 @@
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/Parse.java": {
-    "mtime": 1794274331.7984302,
-    "seen": 1794275278.8501809,
-    "ast_hash": "38c12722cd2cf55a28af057005f8abaf",
+    "mtime": 1794275376.7530398,
+    "seen": 1794275566.67024,
+    "ast_hash": "a8b673173f60564aa9c917164308f619",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/SidebarReader.java": {
@@ -90,15 +90,15 @@
     "semantic_hash": ""
   },
   "src/test/java/cl/karmamc/client/ParseTest.java": {
-    "mtime": 1794274338.8677282,
-    "seen": 1794275278.8501809,
-    "ast_hash": "6f2143e52af68a56da5e305ede0c53f4",
+    "mtime": 1794275540.8384385,
+    "seen": 1794275566.67024,
+    "ast_hash": "a7afd9d1845e76971f9678db04bade18",
     "semantic_hash": ""
   },
   "PLAN.md": {
-    "mtime": 1794275261.5287032,
-    "seen": 1794275278.8501809,
-    "ast_hash": "6b0fb3eb5ddd50f461dc02946b9b6110",
+    "mtime": 1794275552.4778879,
+    "seen": 1794275566.67024,
+    "ast_hash": "69871b452bc23921ce2ff445ea0df729",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/SpawnerSetupScreen.java": {
@@ -135,6 +135,18 @@
     "mtime": 1794275241.808667,
     "seen": 1794275278.8501809,
     "ast_hash": "110abb6c54c8a1fa11ea360ca63245bd",
+    "semantic_hash": ""
+  },
+  "src/main/java/cl/karmamc/client/AfkCalc.java": {
+    "mtime": 1794275364.8937721,
+    "seen": 1794275566.67024,
+    "ast_hash": "7e729cb5df81821f3ce52083898410c4",
+    "semantic_hash": ""
+  },
+  "src/test/java/cl/karmamc/client/AfkCalcTest.java": {
+    "mtime": 1794275552.2815478,
+    "seen": 1794275566.67024,
+    "ast_hash": "442553152abd200ae7630a10659c392a",
     "semantic_hash": ""
   }
 }

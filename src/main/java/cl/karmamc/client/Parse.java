@@ -27,6 +27,7 @@ public final class Parse {
 	private static final Pattern GEMS_STEP = Pattern.compile("Cada nivel cuesta\\s+" + NUM + "\\s+m[aá]s", FLAGS);
 	// Anchored at "[!]" so a player typing the same text in chat (prefixed by rank/name) does not match.
 	private static final Pattern INVEST_UPGRADE_BOUGHT = Pattern.compile("^\\[!]\\s*¡?Compraste MEJORA DE INVERSI[OÓ]N.*\\spor\\s+[0-9.,]+\\s+Aura!?$", FLAGS);
+	private static final Pattern DURATION = Pattern.compile("([0-9]+(?:\\.[0-9]{1,2})?)([smhd])", Pattern.CASE_INSENSITIVE);
 	private static final Pattern SCOREBOARD_AURA =Pattern.compile("(?<![\\p{L}0-9])Aura:?\\s+" + NUM, FLAGS);
 
 	/**
@@ -139,4 +140,19 @@ public final class Parse {
 
 	/** Sidebar `Aura 18` -> 18. */
 	public static Double scoreboardAura(String line) { return find(SCOREBOARD_AURA, line); }
+
+	/** `/fish afk` time: `1.5h`, `90m`, `30S` -> seconds; one unit (s/m/h/d), up to 2 decimals, > 0; else null. */
+	public static Double duration(String s) {
+		if (s == null) return null;
+		Matcher m = DURATION.matcher(s.trim());
+		if (!m.matches()) return null;
+		double v = Double.parseDouble(m.group(1));
+		if (v <= 0) return null;
+		return v * switch (Character.toLowerCase(m.group(2).charAt(0))) {
+			case 's' -> 1;
+			case 'm' -> 60;
+			case 'h' -> 3600;
+			default -> 86400;
+		};
+	}
 }

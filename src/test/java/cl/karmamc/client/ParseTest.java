@@ -125,4 +125,18 @@ class ParseTest {
 		assertNull(Parse.gemsNextCost("❙ Tu nivel ahora: 25"));
 		assertNull(Parse.gemsStep("❙ Nivel 26: cuesta $26,000,000"));
 	}
+
+	@Test
+	void duration() {
+		assertEquals(3600.0, Parse.duration("1h"));
+		assertEquals(5400.0, Parse.duration("90m"));
+		assertEquals(129600.0, Parse.duration("1.5d"));
+		assertEquals(30.0, Parse.duration("30S"));
+		assertEquals(900.0, Parse.duration("0.25H"));
+		assertEquals(165.0, Parse.duration("2.75m"), 1e-9);
+		assertEquals(3600.0, Parse.duration(" 1h "));
+		for (String bad : new String[] {"1h30m", "1.234h", "h", "-1h", "0h", "0.00m", "abc", "10", "", "1 h", "1,5h"})
+			assertNull(Parse.duration(bad), bad);
+		assertNull(Parse.duration(null));
+	}
 }

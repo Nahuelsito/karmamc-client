@@ -1,5 +1,6 @@
 package cl.karmamc.client;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -16,6 +17,9 @@ import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Locale;
+
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class KarmaClient implements ClientModInitializer {
@@ -48,14 +52,18 @@ public class KarmaClient implements ClientModInitializer {
 		});
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-			// All mod commands live under /fish; Phase B adds .then(literal("afk")...) here.
+			// All mod commands live under /fish.
 			dispatcher.register(literal("fish")
 						.then(literal("hud").executes(ctx -> open(new HudEditScreen())))
 						.then(literal("aura")
 								.then(literal("on").executes(ctx -> setAura(ctx, true)))
 								.then(literal("off").executes(ctx -> setAura(ctx, false))))
 						.then(literal("spawnersetup").executes(ctx -> open(new SpawnerSetupScreen())))
-						.then(literal("tokenprices").executes(ctx -> open(new TokenPricesScreen()))));
+						.then(literal("tokenprices").executes(ctx -> open(new TokenPricesScreen())))
+						.then(literal("afk")
+								.executes(ctx -> afk(ctx, null))
+								.then(argument("tiempo", StringArgumentType.greedyString())
+										.executes(ctx -> afk(ctx, StringArgumentType.getString(ctx, "tiempo"))))));
 		});
 	}
 
@@ -71,6 +79,19 @@ public class KarmaClient implements ClientModInitializer {
 		double next = config.investLimit + step;
 		config.investLimit = config.auraShopCap != null ? Math.min(next, config.auraShopCap) : next;
 		config.save();
+	}
+
+	private static int afk(CommandContext<FabricClientCommandSource> ctx, String input) {
+		Double seconds = Parse.duration(input);
+		if (seconds == null) {
+			ctx.getSource().sendFeedback(Component.literal(AfkCalc.USAGE));
+			return 0;
+		}
+		KarmaConfig c = config;
+		for (String line : AfkCalc.lines(input.trim().toLowerCase(Locale.ROOT), seconds, c.investPerSecond, c.minionsPerSecond,
+				c.gemsPer60s, c.showAura, c.auraPer3h, c.spawners, c.totalSold))
+			ctx.getSource().sendFeedback(Component.literal(line));
+		return 1;
 	}
 
 	private static int setAura(CommandContext<FabricClientCommandSource> ctx, boolean on) {

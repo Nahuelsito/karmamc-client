@@ -38,6 +38,7 @@ public class KarmaClient implements ClientModInitializer {
 				(g, delta) -> KarmaHud.extract(g, Minecraft.getInstance()));
 		InvestTooltip.register();
 		GemsTooltip.register();
+		GemShopTooltip.register();
 		ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
 			if (Parse.investUpgradeBought(MenuReader.strip(message))) onInvestUpgradeBought();
 		});
@@ -60,10 +61,12 @@ public class KarmaClient implements ClientModInitializer {
 								.then(literal("off").executes(ctx -> setAura(ctx, false))))
 						.then(literal("spawnersetup").executes(ctx -> open(new SpawnerSetupScreen())))
 						.then(literal("tokenprices").executes(ctx -> open(new TokenPricesScreen())))
+						// Phase B (v1.1.1): add literal("start") / literal("stop") children here; /fish afk has no executes yet.
 						.then(literal("afk")
-								.executes(ctx -> afk(ctx, null))
-								.then(argument("tiempo", StringArgumentType.greedyString())
-										.executes(ctx -> afk(ctx, StringArgumentType.getString(ctx, "tiempo"))))));
+								.then(literal("calcular")
+										.executes(ctx -> afk(ctx, null))
+										.then(argument("tiempo", StringArgumentType.greedyString())
+												.executes(ctx -> afk(ctx, StringArgumentType.getString(ctx, "tiempo")))))));
 		});
 	}
 

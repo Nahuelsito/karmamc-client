@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/** `/fish afk <tiempo>`: passive income over a duration, proportional (averages, not whole intervals). Pure logic. */
+/** `/fish afk calcular <tiempo>`: passive income over a duration, proportional (averages, not whole intervals). Pure logic. */
 public final class AfkCalc {
 	private AfkCalc() {}
 
-	public static final String USAGE = ChatFormatting.RED + "Tiempo inválido. Usa un número (hasta 2 decimales) + s, m, h o d. Ej: /fish afk 1.5h";
+	public static final String USAGE = ChatFormatting.RED + "Tiempo inválido. Usa un número (hasta 2 decimales) + s, m, h o d. Ej: /fish afk calcular 1.5h";
 
 	public static List<String> lines(String label, double seconds, Double investPerSecond, Double minionsPerSecond,
 			Double gemsPer60s, boolean showAura, Double auraPer3h, Map<String, Integer> spawners, Double totalSold) {

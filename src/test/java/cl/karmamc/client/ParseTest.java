@@ -103,6 +103,8 @@ class ParseTest {
 		assertEquals(1_000_000.0, Parse.shopStep("❙ Límite de inversión: +1.000.000"));
 		assertEquals(320_000_000.0, Parse.shopCap("Tope del servidor: 320.000.000"));
 		assertEquals(30.0, Parse.shopPrice("Precio: 30 Aura"));
+		assertEquals(750.0, Parse.gemShopPrice("❙ Precio: 750 Gemas"));
+		assertEquals(5_000.0, Parse.gemShopPrice("❙ Precio: 5.000 Gemas"));
 		assertEquals(18.0, Parse.scoreboardAura("Aura 18"));
 		assertEquals(18.0, Parse.scoreboardAura(" ❙ Aura: 18 "));
 	}
@@ -112,6 +114,9 @@ class ParseTest {
 		assertNull(Parse.invest("Invertido: $51.5M/51.5M"));
 		assertNull(Parse.minion("Dinero total: $32"));
 		assertNull(Parse.shopPrice("Precio: 30 Gemas"));
+		assertNull(Parse.gemShopPrice("Precio: 30 Aura"));
+		assertNull(Parse.gemShopPrice("❙ Gana unos $6.000 por hora"));
+		assertNull(Parse.gemShopPrice("❙ Comprado: 3.21k veces"));
 		assertNull(Parse.scoreboardAura("Gemas 33"));
 		assertNull(Parse.scoreboardAura("1 Aura cada 3 horas"));
 	}

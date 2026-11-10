@@ -114,10 +114,15 @@ Cada fase la construye un subagente; el líder audita (review + build + tests) a
   - `/fish aura on|off` — mostrar/ocultar Aura/h en el HUD.
   - `/fish spawnersetup` — Módulo 2.
   - `/fish tokenprices` — Módulo 3.
-  - `/fish afk <tiempo>` — fase B: imprime en el chat (solo cliente) cuánto rinde cada moneda pasiva en ese tiempo. Tiempo: número con hasta 2 decimales + una unidad `s`/`m`/`h`/`d` (sin distinguir mayúsculas), p. ej. `1h`, `90m`, `1.5d`; inválido o sin argumento → mensaje rojo de uso. Cálculo proporcional (promedios, no intervalos completos), mismos datos que el HUD:
+  - `/fish afk calcular <tiempo>` (en v1.1.0 era `/fish afk <tiempo>`; renombrado en v1.1.1) — fase B: imprime en el chat (solo cliente) cuánto rinde cada moneda pasiva en ese tiempo. Tiempo: número con hasta 2 decimales + una unidad `s`/`m`/`h`/`d` (sin distinguir mayúsculas), p. ej. `1h`, `90m`, `1.5d`; inválido o sin argumento → mensaje rojo de uso. Cálculo proporcional (promedios, no intervalos completos), mismos datos que el HUD:
     - Dinero (verde) = (invest/s + minions/s) × segundos.
     - Gemas (rosa) = gemas/60s × segundos/60.
     - Spawners (verde, solo si hay alguno) = spawners/h × segundos/3600.
     - Aura (rojo, solo si `/fish aura on`) = aura/3h × segundos/10800.
-    - Ej.: invest 14 $/s + 1 minion 14 $/s, 1 blaze, gemas nivel 1 (1/60s), `/fish afk 1h` → `Dinero (invest + minions): $100.8k`, `Gemas: 60`, `Spawners: $6k`.
+    - Ej.: invest 14 $/s + 1 minion 14 $/s, 1 blaze, gemas nivel 1 (1/60s), `/fish afk calcular 1h` → `Dinero (invest + minions): $100.8k`, `Gemas: 60`, `Spawners: $6k`.
 - Los comandos del servidor (`/invest`, `/gemslevel`, `/prestige`, `/trade`) no cambian.
+
+## v1.1.1
+- **Tooltip en la Tienda de Gemas** (`/gemshop`, menú `Tienda de Gemas`). En cualquier ítem cuyo lore tenga `Precio: N Gemas` (ej. `GENERADOR BLAZE [CLICK]`: `❙ Gana unos $6.000 por hora`, `❙ Precio: 750 Gemas`, `❙ Comprado: 3.21k veces`) se agrega: línea en blanco, encabezado dorado `Catfish69 QoL for KarmaMC` y `Compras X por hora con tu /gemslevel`, con X = (gemas/60s × 60) / precio (formato corto, 2 decimales). Sin gemas/60s leído → `Abre /gemslevel para calcular`. Solo visual, solo en ese menú.
+  - Chequeo: 33 gemas/60s → 1.980/h; precio 750 → `Compras 2.64 por hora con tu /gemslevel`.
+- **Renombre del calculador AFK**: `/fish afk <tiempo>` pasa a `/fish afk calcular <tiempo>`; la forma corta deja de existir. `/fish afk calcular` sin tiempo → mensaje rojo de uso (`Ej: /fish afk calcular 1.5h`). `/fish afk` solo no hace nada por ahora (fase B agrega `start`/`stop`).

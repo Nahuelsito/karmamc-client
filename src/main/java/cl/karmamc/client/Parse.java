@@ -22,6 +22,7 @@ public final class Parse {
 	private static final Pattern SHOP_STEP = Pattern.compile("L[ií]mite de inversi[oó]n:\\s*" + NUM, FLAGS);
 	private static final Pattern SHOP_CAP = Pattern.compile("Tope del servidor:\\s*" + NUM, FLAGS);
 	private static final Pattern SHOP_PRICE = Pattern.compile("Precio:\\s*" + NUM + "\\s*Aura", FLAGS);
+	private static final Pattern GEM_SHOP_PRICE = Pattern.compile("Precio:\\s*" + NUM + "\\s*Gemas", FLAGS);
 	private static final Pattern GEMS_LEVEL = Pattern.compile("Tu nivel ahora:\\s*" + NUM, FLAGS);
 	private static final Pattern GEMS_NEXT_COST = Pattern.compile("Nivel\\s+[0-9]+:\\s*cuesta\\s+" + NUM, FLAGS);
 	private static final Pattern GEMS_STEP = Pattern.compile("Cada nivel cuesta\\s+" + NUM + "\\s+m[aá]s", FLAGS);
@@ -124,6 +125,9 @@ public final class Parse {
 	/** `Precio: 30 Aura` -> 30. */
 	public static Double shopPrice(String line) { return find(SHOP_PRICE, line); }
 
+	/** Gem shop `❙ Precio: 750 Gemas` -> 750. */
+	public static Double gemShopPrice(String line) { return find(GEM_SHOP_PRICE, line); }
+
 	/** `❙ Tu nivel ahora: 25` -> 25 (gems level). */
 	public static Double gemsLevel(String line) { return find(GEMS_LEVEL, line); }
 
@@ -141,7 +145,7 @@ public final class Parse {
 	/** Sidebar `Aura 18` -> 18. */
 	public static Double scoreboardAura(String line) { return find(SCOREBOARD_AURA, line); }
 
-	/** `/fish afk` time: `1.5h`, `90m`, `30S` -> seconds; one unit (s/m/h/d), up to 2 decimals, > 0; else null. */
+	/** `/fish afk calcular` time: `1.5h`, `90m`, `30S` -> seconds; one unit (s/m/h/d), up to 2 decimals, > 0; else null. */
 	public static Double duration(String s) {
 		if (s == null) return null;
 		Matcher m = DURATION.matcher(s.trim());

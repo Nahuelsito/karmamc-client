@@ -1,13 +1,13 @@
-# KarmaMC Client — Plan
+# Catfish69 QoL for KarmaMC — Plan
 
 Mod client-side para el servidor KarmaMC. Fabric, Minecraft 26.2, Java 25, nombres oficiales Mojang.
-Mod id: `karmaclient`. Nombre: "KarmaMC Client". Paquete: `cl.karmamc.client`.
+Mod id: `karmaclient`. Nombre: "Catfish69 QoL for KarmaMC" (antes "KarmaMC Client"). Paquete: `cl.karmamc.client`.
 Permitido por los admins: solo cálculo y visual. Nada que automatice clicks, envíe paquetes o dé ventaja física.
 
 ## Decisiones
 - Todo en el HUD se muestra **por hora**.
 - Formato de números corto: `150.4k`, `1.5m`, `2.3b` (1 decimal, sin decimal si es entero).
-- HUD movible con pantalla de edición (comando `/karmaclient hud` y tecla configurable) arrastrando con mouse. Posición guardada en config.
+- HUD movible con pantalla de edición (comando `/fish hud` y tecla configurable) arrastrando con mouse. Posición guardada en config.
 - Monedas modeladas: Dinero, Gemas, Aura, Puntos de Misión, Coins. Coins y Puntos de Misión no se usan en ningún módulo por ahora.
 - No se lee chat por ahora: el ingreso pasivo no se anuncia en chat.
 - Valores leídos se guardan en config para que el HUD funcione tras reiniciar sin reabrir menús.
@@ -27,7 +27,7 @@ Ejemplos extra de números que deben parsear: `$51.5M`, `$1.28M`, `$570.42m`, `1
 Regla: con sufijo k/m/b (mayús. o minús.) el punto es decimal; sin sufijo, `.` y `,` en grupos de 3 son separadores de miles.
 
 ### Aura (pendiente de validar)
-Nadie ha prestigiado aún, así que no sabemos cómo cambia el menú. Por ahora: se parsea `N Aura cada 3 horas` en `Prestigio`, pero la línea de Aura/h solo aparece si el usuario la activa con `/karmaclient aura on`. Cuando alguien prestigie, se manda captura y se ajusta.
+Nadie ha prestigiado aún, así que no sabemos cómo cambia el menú. Por ahora: se parsea `N Aura cada 3 horas` en `Prestigio`, pero la línea de Aura/h solo aparece si el usuario la activa con `/fish aura on`. Cuando alguien prestigie, se manda captura y se ajusta.
 
 ## Módulo 1 — HUD
 Líneas:
@@ -38,7 +38,7 @@ Líneas:
 
 Línea sin dato todavía: mostrar `?` y el menú a abrir (ej. `Gemas: ? (/gemslevel)`).
 
-## Módulo 2 — `/spawnersetup` (comando client-side)
+## Módulo 2 — `/fish spawnersetup` (comando client-side)
 Pantalla con un campo de cantidad por tipo. Dinero/h base por spawner (sin multiplicador):
 
 | Tipo | Precio (gemas) | $/h base |
@@ -59,8 +59,8 @@ Milestones (solo estos, nada entremedio):
 Chequeo: 570.42m vendido → 1.4x (el menú muestra 1.5x como nivel *en progreso*).
 La pantalla muestra multiplicador usado, total/h, y sin multiplicador si no se ha leído el menú.
 
-## Módulo 3 — `/tokenprices` (comando client-side)
-Pantalla con 2 campos (mismo estilo que `/spawnersetup`), guardados en config:
+## Módulo 3 — `/fish tokenprices` (comando client-side)
+Pantalla con 2 campos (mismo estilo que `/fish spawnersetup`), guardados en config:
 - Precio de 1k Gemas. Default `300k`.
 - Precio de 1 Aura. Default `200k`.
 Aceptan formato corto (`300k`, `1.5m`). Precio de Gemas solo se guarda; no se usa en cálculos aún.
@@ -94,7 +94,7 @@ Si falta un dato (límite o aura), decir qué abrir: `Abre /invest para calcular
 2. **Esqueleto** — hecho.
 3. **Parsers y cálculos** — parseo de números, lectura de menús y scoreboard, tabla de multiplicadores, fórmula de trade, cálculo Invest Left; tests JUnit con los ejemplos y chequeos de este plan.
 4. **Módulo 1** — HUD + pantalla de edición arrastrable.
-5. **Módulos 2 y 3** — `/spawnersetup` y `/tokenprices`.
+5. **Módulos 2 y 3** — `/fish spawnersetup` y `/fish tokenprices`.
 6. **Módulo 4** — tooltip Invest Left.
 7. **Pulido y entrega** — prueba en servidor, jar final.
 
@@ -105,3 +105,14 @@ Cada fase la construye un subagente; el líder audita (review + build + tests) a
 - `Tu nivel ahora: 25` → nivel L. `Nivel 26: cuesta $26,000,000` → costo C del siguiente. `Cada nivel cuesta $1.000.000 mas que el anterior.` → paso S.
 - n = 100 − L; total = n×C + S×n(n−1)/2. Chequeo: L=25 → 75 niveles → $4.725b (`Cuesta $4.73b`).
 - L ≥ 100 → `Nivel máximo (100)`. Falta un dato → no se agrega nada.
+
+## v1.1.0 — Renombre y prefijo `/fish`
+- Nombre visible: `Catfish69 QoL for KarmaMC` (antes `KarmaMC Client`) en `fabric.mod.json`, categoría de teclas y encabezado dorado de los tooltips. Mod Menu ya muestra la versión al lado, no va en el nombre.
+- Sin cambios (para conservar ajustes): mod id `karmaclient`, paquete `cl.karmamc.client`, config `config/karmaclient.json`, tecla `key.karmaclient.hud`.
+- Todos los comandos del mod bajo una raíz client-side `/fish`. Se eliminan `/karmaclient`, `/spawnersetup` y `/tokenprices`:
+  - `/fish hud` — pantalla de edición del HUD.
+  - `/fish aura on|off` — mostrar/ocultar Aura/h en el HUD.
+  - `/fish spawnersetup` — Módulo 2.
+  - `/fish tokenprices` — Módulo 3.
+  - `/fish afk` — reservado (fase B).
+- Los comandos del servidor (`/invest`, `/gemslevel`, `/prestige`, `/trade`) no cambian.

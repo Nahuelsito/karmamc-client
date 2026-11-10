@@ -31,7 +31,7 @@ public final class GemsTooltip {
 	/** Tooltip lines with legacy color codes; empty when the item is not the gems-level star or a value is missing. */
 	static List<String> lines(Double level, Double cost, Double step) {
 		if (level == null) return List.of();
-		List<String> out = new ArrayList<>(List.of("", ChatFormatting.GOLD + "KarmaMC Client"));
+		List<String> out = new ArrayList<>(List.of("", ChatFormatting.GOLD + "Catfish69 QoL for KarmaMC"));
 		long l = level.longValue();
 		if (l >= Calc.GEMS_MAX_LEVEL) {
 			out.add(ChatFormatting.GREEN + "Nivel máximo (" + Calc.GEMS_MAX_LEVEL + ")");

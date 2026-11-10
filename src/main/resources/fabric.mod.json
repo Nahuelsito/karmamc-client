@@ -2,8 +2,8 @@
 	"schemaVersion": 1,
 	"id": "karmaclient",
 	"version": "${version}",
-	"name": "KarmaMC Client",
-	"description": "Client-side calculator HUD for the KarmaMC server.",
+	"name": "Catfish69 QoL for KarmaMC",
+	"description": "Catfish69 QoL for KarmaMC: client-side calculator HUD and tooltips. Commands under /fish.",
 	"environment": "client",
 	"entrypoints": {
 		"client": [

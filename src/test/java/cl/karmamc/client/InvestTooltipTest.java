@@ -14,7 +14,7 @@ class InvestTooltipTest {
 
 	@Test
 	void planCheck() {
-		assertEquals(List.of("", "KarmaMC Client",
+		assertEquals(List.of("", "Catfish69 QoL for KarmaMC",
 						"Faltan 269 mejoras (8,070 Aura)",
 						"Tienes 18 → faltan 8,052 Aura",
 						"Por /trade: 10,065 Aura ≈ $2b"),
@@ -23,13 +23,13 @@ class InvestTooltipTest {
 
 	@Test
 	void atCap() {
-		assertEquals(List.of("", "KarmaMC Client", "Ya estás en el tope de inversión"),
+		assertEquals(List.of("", "Catfish69 QoL for KarmaMC", "Ya estás en el tope de inversión"),
 				plain(InvestTooltip.lines(320e6, 320e6, 1e6, 30.0, 18.0, 200_000)));
 	}
 
 	@Test
 	void missingLimit() {
-		assertEquals(List.of("", "KarmaMC Client", "Abre /invest para calcular"),
+		assertEquals(List.of("", "Catfish69 QoL for KarmaMC", "Abre /invest para calcular"),
 				plain(InvestTooltip.lines(null, 320e6, 1e6, 30.0, 18.0, 200_000)));
 	}
 

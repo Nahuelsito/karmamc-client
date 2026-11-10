@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-/** /spawnersetup: owned count per spawner type, live $/h; counts saved on close. */
+/** /fish spawnersetup: owned count per spawner type, live $/h; counts saved on close. */
 public class SpawnerSetupScreen extends Screen {
 	private static final String[] KEYS = {"pollo", "vaca", "cerdo", "blaze", "esqueleto", "creeper", "golem"};
 	private static final String[] LABELS = {"Pollo", "Vaca", "Cerdo", "Blaze", "Esqueleto", "Creeper", "Golem"};

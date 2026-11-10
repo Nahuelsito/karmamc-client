@@ -36,15 +36,15 @@
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/KarmaClient.java": {
-    "mtime": 1794274122.667121,
-    "seen": 1794274162.6475346,
-    "ast_hash": "f3fe01c4c8893cb1d8e977fd4f2b1dbb",
+    "mtime": 1794275250.8050106,
+    "seen": 1794275278.8501809,
+    "ast_hash": "c5283314926f19dc3769ff43bba754b4",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/KarmaConfig.java": {
-    "mtime": 1794266679.5992508,
-    "seen": 1794267339.08712,
-    "ast_hash": "29685f4ee09d32562c180e7e63a4c366",
+    "mtime": 1794275242.0274253,
+    "seen": 1794275278.8501809,
+    "ast_hash": "6d4daa789c9fc214b85aef79d166498b",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/KarmaHud.java": {
@@ -60,9 +60,9 @@
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/Parse.java": {
-    "mtime": 1794274177.6103027,
-    "seen": 1794274195.9337568,
-    "ast_hash": "b60ddca843efa51b1c376f87f30e9804",
+    "mtime": 1794274331.7984302,
+    "seen": 1794275278.8501809,
+    "ast_hash": "38c12722cd2cf55a28af057005f8abaf",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/SidebarReader.java": {
@@ -72,15 +72,15 @@
     "semantic_hash": ""
   },
   "src/main/resources/assets/karmaclient/lang/en_us.json": {
-    "mtime": 1794267234.3300388,
-    "seen": 1794267339.08712,
-    "ast_hash": "c9e8e6ea02195e0d19c0f8422528740c",
+    "mtime": 1794275241.8447533,
+    "seen": 1794275278.8501809,
+    "ast_hash": "40763f9d2bc41ab4080e1d9d6b3c777f",
     "semantic_hash": ""
   },
   "src/main/resources/fabric.mod.json": {
-    "mtime": 1794264926.9020426,
-    "seen": 1794267339.08712,
-    "ast_hash": "788b6f1e7ec794fc4faa859ff5c6ea66",
+    "mtime": 1794275241.8935478,
+    "seen": 1794275278.8501809,
+    "ast_hash": "ba7278d10ec7752eb8b1ef285825d890",
     "semantic_hash": ""
   },
   "src/test/java/cl/karmamc/client/CalcTest.java": {
@@ -90,51 +90,51 @@
     "semantic_hash": ""
   },
   "src/test/java/cl/karmamc/client/ParseTest.java": {
-    "mtime": 1794274138.9916587,
-    "seen": 1794274162.6475346,
-    "ast_hash": "dbc5dd1029b5f520ac79f4b29121427f",
+    "mtime": 1794274338.8677282,
+    "seen": 1794275278.8501809,
+    "ast_hash": "6f2143e52af68a56da5e305ede0c53f4",
     "semantic_hash": ""
   },
   "PLAN.md": {
-    "mtime": 1794274139.2962036,
-    "seen": 1794274162.6475346,
-    "ast_hash": "5d85e150c7a0b2e3168def4c98f46ed7",
+    "mtime": 1794275261.5287032,
+    "seen": 1794275278.8501809,
+    "ast_hash": "6b0fb3eb5ddd50f461dc02946b9b6110",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/SpawnerSetupScreen.java": {
-    "mtime": 1794269692.2335055,
-    "seen": 1794270225.0655947,
-    "ast_hash": "ca8dd51bc7a4f14eab8858771b676f7e",
+    "mtime": 1794275241.9820056,
+    "seen": 1794275278.8501809,
+    "ast_hash": "a4b78b802a2403ad2532f7948f14ac18",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/TokenPricesScreen.java": {
-    "mtime": 1794268343.4702187,
-    "seen": 1794268402.3506715,
-    "ast_hash": "09b4c4c9d5af643d9f880e23d688ebb0",
+    "mtime": 1794275241.9347,
+    "seen": 1794275278.8501809,
+    "ast_hash": "14f4cce8fd73ac9bb6424bdd2317a57e",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/InvestTooltip.java": {
-    "mtime": 1794270143.9152846,
-    "seen": 1794270225.0644925,
-    "ast_hash": "66b75a4c1e3e1e59a54899f94f9e1195",
+    "mtime": 1794275241.8186867,
+    "seen": 1794275278.8501809,
+    "ast_hash": "20c82246f6e6851ce64c62650923b21b",
     "semantic_hash": ""
   },
   "src/test/java/cl/karmamc/client/InvestTooltipTest.java": {
-    "mtime": 1794270145.753307,
-    "seen": 1794270225.0655947,
-    "ast_hash": "b4dcc05e894407a030c564746883ef4a",
+    "mtime": 1794275241.8001592,
+    "seen": 1794275278.8501809,
+    "ast_hash": "dbd604870155a836d58d009c256a1440",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/GemsTooltip.java": {
-    "mtime": 1794274122.629943,
-    "seen": 1794274162.6475346,
-    "ast_hash": "5872a473e95545805f67741560bed123",
+    "mtime": 1794275241.8352273,
+    "seen": 1794275278.8501809,
+    "ast_hash": "f9b0c0854ffb7d3de7561b1c73fd2793",
     "semantic_hash": ""
   },
   "src/test/java/cl/karmamc/client/GemsTooltipTest.java": {
-    "mtime": 1794274139.2529073,
-    "seen": 1794274162.6475346,
-    "ast_hash": "7b3da6fc2d02ec3e8bdb98a8b00ae302",
+    "mtime": 1794275241.808667,
+    "seen": 1794275278.8501809,
+    "ast_hash": "110abb6c54c8a1fa11ea360ca63245bd",
     "semantic_hash": ""
   }
 }

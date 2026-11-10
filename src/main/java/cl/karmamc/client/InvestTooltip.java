@@ -28,7 +28,7 @@ public final class InvestTooltip {
 	/** Tooltip lines with legacy color codes; empty while the shop lore has not been read yet. */
 	static List<String> lines(Double limit, Double cap, Double step, Double price, Double aura, double auraPrice) {
 		if (cap == null || step == null || price == null) return List.of();
-		List<String> out = new ArrayList<>(List.of("", ChatFormatting.GOLD + "KarmaMC Client"));
+		List<String> out = new ArrayList<>(List.of("", ChatFormatting.GOLD + "Catfish69 QoL for KarmaMC"));
 		if (limit == null) {
 			out.add(ChatFormatting.RED + "Abre /invest para calcular");
 			return out;

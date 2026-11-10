@@ -36,7 +36,7 @@ public class KarmaConfig {
 	public Double auraShopCap;
 	public Double auraShopPrice;
 
-	// Token prices (money), edited via /tokenprices.
+	// Token prices (money), edited via /fish tokenprices.
 	public double gemPricePer1k = 300_000;
 	public double auraPrice = 200_000;
 

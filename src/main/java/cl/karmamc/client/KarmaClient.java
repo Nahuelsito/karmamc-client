@@ -48,13 +48,14 @@ public class KarmaClient implements ClientModInitializer {
 		});
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-			dispatcher.register(literal("spawnersetup").executes(ctx -> open(new SpawnerSetupScreen())));
-			dispatcher.register(literal("tokenprices").executes(ctx -> open(new TokenPricesScreen())));
-			dispatcher.register(literal("karmaclient")
+			// All mod commands live under /fish; Phase B adds .then(literal("afk")...) here.
+			dispatcher.register(literal("fish")
+						.then(literal("hud").executes(ctx -> open(new HudEditScreen())))
 						.then(literal("aura")
 								.then(literal("on").executes(ctx -> setAura(ctx, true)))
 								.then(literal("off").executes(ctx -> setAura(ctx, false))))
-						.then(literal("hud").executes(ctx -> open(new HudEditScreen()))));
+						.then(literal("spawnersetup").executes(ctx -> open(new SpawnerSetupScreen())))
+						.then(literal("tokenprices").executes(ctx -> open(new TokenPricesScreen()))));
 		});
 	}
 

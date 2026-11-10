@@ -14,19 +14,19 @@ class GemsTooltipTest {
 
 	@Test
 	void planCheck() {
-		assertEquals(List.of("", "KarmaMC Client", "Faltan 75 niveles para nivel 100", "Cuesta $4.73b"),
+		assertEquals(List.of("", "Catfish69 QoL for KarmaMC", "Faltan 75 niveles para nivel 100", "Cuesta $4.73b"),
 				plain(GemsTooltip.lines(25.0, 26e6, 1e6)));
 	}
 
 	@Test
 	void level99() {
-		assertEquals(List.of("", "KarmaMC Client", "Faltan 1 nivel para nivel 100", "Cuesta $100m"),
+		assertEquals(List.of("", "Catfish69 QoL for KarmaMC", "Faltan 1 nivel para nivel 100", "Cuesta $100m"),
 				plain(GemsTooltip.lines(99.0, 100e6, 1e6)));
 	}
 
 	@Test
 	void maxLevel() {
-		assertEquals(List.of("", "KarmaMC Client", "Nivel máximo (100)"),
+		assertEquals(List.of("", "Catfish69 QoL for KarmaMC", "Nivel máximo (100)"),
 				plain(GemsTooltip.lines(100.0, null, null)));
 	}
 

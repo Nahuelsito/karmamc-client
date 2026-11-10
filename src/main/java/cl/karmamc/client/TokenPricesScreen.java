@@ -5,7 +5,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-/** /tokenprices: Gem and Aura prices in short format; only valid values are saved on close. */
+/** /fish tokenprices: Gem and Aura prices in short format; only valid values are saved on close. */
 public class TokenPricesScreen extends Screen {
 	private static final int W = 160;
 	private EditBox gems, aura;

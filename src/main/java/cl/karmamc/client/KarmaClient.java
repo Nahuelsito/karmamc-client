@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -32,6 +33,9 @@ public class KarmaClient implements ClientModInitializer {
 		HudElementRegistry.addLast(Identifier.fromNamespaceAndPath(MOD_ID, "hud"),
 				(g, delta) -> KarmaHud.extract(g, Minecraft.getInstance()));
 		InvestTooltip.register();
+		ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
+			if (Parse.investUpgradeBought(MenuReader.strip(message))) onInvestUpgradeBought();
+		});
 		ClientTickEvents.END_CLIENT_TICK.register(mc -> {
 			MenuReader.tick(mc);
 			SidebarReader.tick(mc);
@@ -56,6 +60,15 @@ public class KarmaClient implements ClientModInitializer {
 	private static int open(Screen screen) {
 		pendingScreen = screen;
 		return 1;
+	}
+
+	/** Each Aurashop purchase raises the invest limit by one step (capped), so Invest Left stays current without reopening /invest. */
+	private static void onInvestUpgradeBought() {
+		if (config.investLimit == null) return;
+		double step = config.auraShopStep != null ? config.auraShopStep : 1_000_000;
+		double next = config.investLimit + step;
+		config.investLimit = config.auraShopCap != null ? Math.min(next, config.auraShopCap) : next;
+		config.save();
 	}
 
 	private static int setAura(CommandContext<FabricClientCommandSource> ctx, boolean on) {

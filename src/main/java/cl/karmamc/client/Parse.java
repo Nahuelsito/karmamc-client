@@ -22,7 +22,9 @@ public final class Parse {
 	private static final Pattern SHOP_STEP = Pattern.compile("L[ií]mite de inversi[oó]n:\\s*" + NUM, FLAGS);
 	private static final Pattern SHOP_CAP = Pattern.compile("Tope del servidor:\\s*" + NUM, FLAGS);
 	private static final Pattern SHOP_PRICE = Pattern.compile("Precio:\\s*" + NUM + "\\s*Aura", FLAGS);
-	private static final Pattern SCOREBOARD_AURA = Pattern.compile("(?<![\\p{L}0-9])Aura:?\\s+" + NUM, FLAGS);
+	// Anchored at "[!]" so a player typing the same text in chat (prefixed by rank/name) does not match.
+	private static final Pattern INVEST_UPGRADE_BOUGHT = Pattern.compile("^\\[!]\\s*¡?Compraste MEJORA DE INVERSI[OÓ]N.*\\spor\\s+[0-9.,]+\\s+Aura!?$", FLAGS);
+	private static final Pattern SCOREBOARD_AURA =Pattern.compile("(?<![\\p{L}0-9])Aura:?\\s+" + NUM, FLAGS);
 
 	/**
 	 * Parses `$51.5M`, `1.5b`, `$26,000,000`, `$1.000.000`, `+721`, `7.82k`, `$721/s`.
@@ -115,6 +117,11 @@ public final class Parse {
 
 	/** `Precio: 30 Aura` -> 30. */
 	public static Double shopPrice(String line) { return find(SHOP_PRICE, line); }
+
+	/** Chat `[!] ¡Compraste MEJORA DE INVERSIÓN [ᴄʟɪᴄᴋ] por 30 Aura!` -> true. */
+	public static boolean investUpgradeBought(String line) {
+		return line != null && INVEST_UPGRADE_BOUGHT.matcher(line.trim()).matches();
+	}
 
 	/** Sidebar `Aura 18` -> 18. */
 	public static Double scoreboardAura(String line) { return find(SCOREBOARD_AURA, line); }

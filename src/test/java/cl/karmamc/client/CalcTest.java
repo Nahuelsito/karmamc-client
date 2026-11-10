@@ -74,12 +74,4 @@ class CalcTest {
 		assertEquals(0, Calc.gemsLeft(100, 101e6, 1e6));
 		assertEquals(0, Calc.gemsLeft(120, 121e6, 1e6));
 	}
-
-	@ParameterizedTest
-	@CsvSource({
-			"Venom, false, 1.25", "Venom, true, 1.5", "Abyss, false, 3.0", "Abyss, true, 3.75",
-			", true, 1.25", ", false, 1.0", "Cobra, false, 1.15", "Karma+, true, 2.45", "Karma, false, 1.9", "Unknown, false, 1.0"})
-	void gemsMultiplier(String rank, boolean pass, double expected) {
-		assertEquals(expected, Calc.gemsMultiplier(rank, pass), 1e-9);
-	}
 }

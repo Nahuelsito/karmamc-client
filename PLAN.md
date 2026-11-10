@@ -155,3 +155,6 @@ Cada fase la construye un subagente; el líder audita (review + build + tests) a
 - Invest/s se lee de `Inversión $749/s` del scoreboard (incluye outposts); si falta, se usa el valor de /invest.
 - HUD por hora, `/fish afk calcular` y la sesión AFK usan: invest del scoreboard, gemas = base /gemslevel × multiplicador cada intervalo.
 - El "+Xm en invest" del rango ya viene incluido en el límite leído del servidor: sin cambios en Invest Left.
+
+## v1.1.5
+- Probado en juego: el multiplicador de rango/pase NO aplica a /gemslevel; cada pago da exactamente lo del tooltip. Se elimina el multiplicador (y la lectura de rango/pase del TAB). Se mantienen el intervalo 40/60 s del contador y la Inversión del scoreboard.

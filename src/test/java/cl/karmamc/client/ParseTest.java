@@ -169,20 +169,4 @@ class ParseTest {
 		assertNull(Parse.scoreboardGemsCountdown("Gemas 19.1k"));
 		assertNull(Parse.scoreboardGemsCountdown("Inversión $749/s"));
 	}
-
-	@Test
-	void serverRankAndPass() {
-		assertEquals("Venom", Parse.serverRank("VENOM Catfish69"));
-		assertFalse(Parse.hasPremiumPass("VENOM Catfish69"));
-		assertEquals("Karma+", Parse.serverRank("KARMA+ Foo ★"));
-		assertTrue(Parse.hasPremiumPass("KARMA+ Foo ★"));
-		assertTrue(Parse.hasPremiumPass("ABYSS Foo ⭐"));
-		assertEquals("Karma", Parse.serverRank("KARMA Foo"));
-		assertEquals("Abyss", Parse.serverRank("abyss Foo"));
-		assertNull(Parse.serverRank("+ dino1234"));
-		assertNull(Parse.serverRank("+ Venomous"));
-		assertNull(Parse.serverRank("+ xCobra"));
-		assertNull(Parse.serverRank("+ Hydra_99"));
-		assertNull(Parse.serverRank(null));
-	}
 }

@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/Calc.java": {
-    "mtime": 1794312202.880203,
-    "seen": 1794312307.71334,
-    "ast_hash": "f48c366e5fbdc7fd2ffe2dc1b56fb75e",
+    "mtime": 1794314882.1921804,
+    "seen": 1794314904.110891,
+    "ast_hash": "d3ebb835742b7cdd056984af7c62288a",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/Currency.java": {
@@ -60,15 +60,15 @@
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/Parse.java": {
-    "mtime": 1794312233.3347743,
-    "seen": 1794312307.71334,
-    "ast_hash": "4bdf1aa52f81b521d1f772fc0efb7ac5",
+    "mtime": 1794314882.1911747,
+    "seen": 1794314904.110891,
+    "ast_hash": "66d9ce9fb18b26664a5281af61234209",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/SidebarReader.java": {
-    "mtime": 1794312236.28728,
-    "seen": 1794312307.71334,
-    "ast_hash": "4693c432b87fc727d01abbf319f0b695",
+    "mtime": 1794314882.1896696,
+    "seen": 1794314904.110891,
+    "ast_hash": "d163e0825bcf72cc3c06cfaeea9f3710",
     "semantic_hash": ""
   },
   "src/main/resources/assets/karmaclient/lang/en_us.json": {
@@ -84,21 +84,21 @@
     "semantic_hash": ""
   },
   "src/test/java/cl/karmamc/client/CalcTest.java": {
-    "mtime": 1794312278.5932145,
-    "seen": 1794312307.71334,
-    "ast_hash": "4d704ad18501c5e5c826297b28d34a6c",
+    "mtime": 1794314882.1931832,
+    "seen": 1794314904.110891,
+    "ast_hash": "853e7d0cae2f30e2f6e7c1d0ae8fc6f3",
     "semantic_hash": ""
   },
   "src/test/java/cl/karmamc/client/ParseTest.java": {
-    "mtime": 1794312278.594723,
-    "seen": 1794312307.71334,
-    "ast_hash": "091c251ab12f3036d1ae945619f57afc",
+    "mtime": 1794314882.1931832,
+    "seen": 1794314904.110891,
+    "ast_hash": "7ecf148988fff3d18e6197d36dcc739c",
     "semantic_hash": ""
   },
   "PLAN.md": {
-    "mtime": 1794312339.8950925,
-    "seen": 1794312352.5547225,
-    "ast_hash": "699ec89526049707c861301166bb48d8",
+    "mtime": 1794314924.249314,
+    "seen": 1794314931.0161226,
+    "ast_hash": "905f817802fac1dbbc93ec1ac63baba8",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/SpawnerSetupScreen.java": {
@@ -144,9 +144,9 @@
     "semantic_hash": ""
   },
   "src/test/java/cl/karmamc/client/AfkCalcTest.java": {
-    "mtime": 1794312278.5932145,
-    "seen": 1794312307.71334,
-    "ast_hash": "a56e83328e6c6a9c95838858b16c70dd",
+    "mtime": 1794314882.1946917,
+    "seen": 1794314904.110891,
+    "ast_hash": "c286b7d12dbe81108498c4cd45f5d4ab",
     "semantic_hash": ""
   },
   "src/main/java/cl/karmamc/client/GemShopTooltip.java": {

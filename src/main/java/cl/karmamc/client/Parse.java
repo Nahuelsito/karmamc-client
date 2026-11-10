@@ -35,9 +35,6 @@ public final class Parse {
 	private static final Pattern SCOREBOARD_INVEST = Pattern.compile("(?<![\\p{L}0-9])Inversi[oó]n:?\\s+" + NUM, FLAGS);
 	private static final Pattern SCOREBOARD_GEMS_COUNTDOWN =
 			Pattern.compile("(?<![\\p{L}0-9])Gemas:?\\s+[$+]?[0-9][0-9.,]*[kmb]?\\s*\\(([0-9]+)s\\)", FLAGS);
-	// Karma+ before Karma; `_` counts as a name char so `Venom_99` (a player name) is not a rank.
-	private static final Pattern SERVER_RANK =
-			Pattern.compile("(?<![\\p{L}0-9_])(KARMA\\+|(?:ABYSS|HYDRA|MAMBA|VYPER|VENOM|COBRA|KARMA)(?![\\p{L}0-9_]))", FLAGS);
 
 	/**
 	 * Parses `$51.5M`, `1.5b`, `$26,000,000`, `$1.000.000`, `+721`, `7.82k`, `$721/s`.
@@ -171,20 +168,6 @@ public final class Parse {
 		} catch (NumberFormatException e) {
 			return null; // absurdly long digit run
 		}
-	}
-
-	/** Own tab-list text `VENOM Catfish69` -> `Venom`; canonical names Cobra, Venom, Vyper, Mamba, Hydra, Karma, Karma+, Abyss; else null. */
-	public static String serverRank(String tabText) {
-		if (tabText == null) return null;
-		Matcher m = SERVER_RANK.matcher(tabText);
-		if (!m.find()) return null;
-		String r = m.group(1).toLowerCase(java.util.Locale.ROOT);
-		return Character.toUpperCase(r.charAt(0)) + r.substring(1);
-	}
-
-	/** Premium pass holders show a star (`★` or `⭐`) next to their name in the tab list. */
-	public static boolean hasPremiumPass(String tabText) {
-		return tabText != null && (tabText.contains("★") || tabText.contains("⭐"));
 	}
 
 	/** `/fish afk calcular` time: `1.5h`, `90m`, `30S` -> seconds; one unit (s/m/h/d), up to 2 decimals, > 0; else null. */

@@ -58,9 +58,9 @@ class AfkCalcTest {
 	}
 
 	@Test
-	void outpostIntervalAndMultiplier() {
-		// 40 s interval, base 10 x Venom+pass 1.5 = 15 per payout; 100 s = 2 whole payouts
-		double perPayout = 10 * Calc.gemsMultiplier("Venom", true);
+	void outpostInterval() {
+		// 40 s interval, 15 per payout; 100 s = 2 whole payouts
+		double perPayout = 15;
 		assertEquals("Gemas: 30", plain(AfkCalc.lines("", 100, null, null, perPayout, 40, false, null, Map.of(), null)).get(3));
 		assertEquals("Gemas: 1.35k", plain(AfkCalc.lines("", 3600, null, null, perPayout, 40, false, null, Map.of(), null)).get(3));
 	}

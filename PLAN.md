@@ -119,7 +119,7 @@ Cada fase la construye un subagente; el líder audita (review + build + tests) a
     - Gemas (rosa) = gemas/60s × segundos/60.
     - Spawners (verde, solo si hay alguno) = spawners/h × segundos/3600.
     - Aura (rojo, solo si `/fish aura on`) = aura/3h × segundos/10800.
-    - Ej.: invest 14 $/s + 1 minion 14 $/s, 1 blaze, gemas nivel 1 (1/60s), `/fish afk calcular 1h` → `Dinero (invest + minions): $100.8k`, `Gemas: 60`, `Spawners: $6k`.
+    - Ej.: invest 14 $/s + 1 minion 14 $/s, 1 blaze, gemas nivel 1 (1/60s), `/fish afk calcular 1h` → `Dinero (invest + minions): $100.8k` (desde v1.1.3: `Invest: $50.4k`, `Minions: $50.4k`), `Gemas: 60`, `Spawners: $6k`.
 - Los comandos del servidor (`/invest`, `/gemslevel`, `/prestige`, `/trade`) no cambian.
 
 ## v1.1.1
@@ -145,3 +145,6 @@ Cada fase la construye un subagente; el líder audita (review + build + tests) a
   - Gemas = floor(segundos / 60) × gemas/60s. Ej.: 90 s → 1 intervalo; 1h → 60.
   - Aura = floor(segundos / 10800) × aura/3h. Ej.: 2h59m → 0; 3h → 1×.
   - Dinero y spawners siguen proporcionales.
+
+## v1.1.3
+- `/fish afk` (calcular, HUD y resumen): la línea de dinero se separa en `Invest: $X` y `Minions: $X`, ambas verdes. Orden: AFK {tiempo}, Invest, Minions, Gemas, Spawners (si hay), Aura (si está activada). Dato faltante → `Invest: ? (abre /invest)` / `Minions: ? (abre la bóveda de minions)`.

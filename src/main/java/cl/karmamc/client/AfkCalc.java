@@ -16,9 +16,12 @@ public final class AfkCalc {
 			Double gemsPer60s, boolean showAura, Double auraPer3h, Map<String, Integer> spawners, Double totalSold) {
 		List<String> out = new ArrayList<>();
 		out.add(ChatFormatting.GOLD + "Catfish69 QoL for KarmaMC — AFK " + label);
-		out.add(ChatFormatting.GREEN + (investPerSecond == null && minionsPerSecond == null
-				? "Dinero: ? (abre /invest y la bóveda de minions)"
-				: "Dinero (invest + minions): $" + Parse.shortNumber((orZero(investPerSecond) + orZero(minionsPerSecond)) * seconds)));
+		out.add(ChatFormatting.GREEN + (investPerSecond == null
+				? "Invest: ? (abre /invest)"
+				: "Invest: $" + Parse.shortNumber(investPerSecond * seconds)));
+		out.add(ChatFormatting.GREEN + (minionsPerSecond == null
+				? "Minions: ? (abre la bóveda de minions)"
+				: "Minions: $" + Parse.shortNumber(minionsPerSecond * seconds)));
 		out.add(ChatFormatting.LIGHT_PURPLE + (gemsPer60s == null
 				? "Gemas: ? (abre /gemslevel)"
 				: "Gemas: " + Parse.shortNumber(Math.floor(seconds / 60) * gemsPer60s, 2)));

@@ -28,6 +28,8 @@ public final class Parse {
 	private static final Pattern GEMS_STEP = Pattern.compile("Cada nivel cuesta\\s+" + NUM + "\\s+m[aá]s", FLAGS);
 	// Anchored at "[!]" so a player typing the same text in chat (prefixed by rank/name) does not match.
 	private static final Pattern INVEST_UPGRADE_BOUGHT = Pattern.compile("^\\[!]\\s*¡?Compraste MEJORA DE INVERSI[OÓ]N.*\\spor\\s+[0-9.,]+\\s+Aura!?$", FLAGS);
+	// Anchored at `[!]` so player chat (rank/name prefix) never matches.
+	private static final Pattern CLAIM = Pattern.compile("^\\[!]\\s*Cobraste\\s+\\$?[0-9][0-9.,]*[kmb]?\\s*\\$?\\.", FLAGS);
 	private static final Pattern DURATION = Pattern.compile("([0-9]+(?:\\.[0-9]{1,2})?)([smhd])", Pattern.CASE_INSENSITIVE);
 	private static final Pattern SCOREBOARD_AURA =Pattern.compile("(?<![\\p{L}0-9])Aura:?\\s+" + NUM, FLAGS);
 
@@ -140,6 +142,11 @@ public final class Parse {
 	/** Chat `[!] ¡Compraste MEJORA DE INVERSIÓN [ᴄʟɪᴄᴋ] por 30 Aura!` -> true. */
 	public static boolean investUpgradeBought(String line) {
 		return line != null && INVEST_UPGRADE_BOUGHT.matcher(line.trim()).matches();
+	}
+
+	/** Chat `[!] Cobraste 619,423.00 $.` (invest) or `[!] Cobraste $287.35K. Tus minions siguen trabajando.` -> true. */
+	public static boolean claim(String line) {
+		return line != null && CLAIM.matcher(line.trim()).find();
 	}
 
 	/** Sidebar `Aura 18` -> 18. */

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/** `/fish afk calcular <tiempo>`: passive income over a duration, proportional (averages, not whole intervals). Pure logic. */
+/** `/fish afk calcular <tiempo>`: passive income over a duration, money and spawners proportional, gems and aura in whole intervals (60 s / 3 h). Pure logic. */
 public final class AfkCalc {
 	private AfkCalc() {}
 
@@ -21,12 +21,12 @@ public final class AfkCalc {
 				: "Dinero (invest + minions): $" + Parse.shortNumber((orZero(investPerSecond) + orZero(minionsPerSecond)) * seconds)));
 		out.add(ChatFormatting.LIGHT_PURPLE + (gemsPer60s == null
 				? "Gemas: ? (abre /gemslevel)"
-				: "Gemas: " + Parse.shortNumber(gemsPer60s * seconds / 60, 2)));
+				: "Gemas: " + Parse.shortNumber(Math.floor(seconds / 60) * gemsPer60s, 2)));
 		if (spawners.values().stream().anyMatch(n -> n != null && n > 0))
 			out.add(ChatFormatting.GREEN + "Spawners: $" + Parse.shortNumber(Calc.spawnersPerHour(spawners, orZero(totalSold)) * seconds / 3600));
 		if (showAura) out.add(ChatFormatting.RED + (auraPer3h == null
 				? "Aura: ? (abre /prestige)"
-				: "Aura: " + Parse.shortNumber(auraPer3h * seconds / 10800, 2)));
+				: "Aura: " + Parse.shortNumber(Math.floor(seconds / 10800) * auraPer3h, 2)));
 		return out;
 	}
 

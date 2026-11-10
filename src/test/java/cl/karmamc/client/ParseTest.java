@@ -85,6 +85,18 @@ class ParseTest {
 	}
 
 	@ParameterizedTest
+	@CsvSource(delimiter = '|', value = {
+			"[!] Cobraste 619,423.00 $.|true",
+			"[!] Cobraste $287.35K. Tus minions siguen trabajando.|true",
+			"[MaceGang] [$] Pepe: [!] Cobraste 619,423.00 $.|false",
+			"[!] ¡Compraste MEJORA DE INVERSIÓN [ᴄʟɪᴄᴋ] por 30 Aura!|false",
+			"[!] Cobraste nada.|false",
+	})
+	void claim(String in, boolean expected) {
+		assertEquals(expected, Parse.claim(in));
+	}
+
+	@ParameterizedTest
 	@CsvSource(delimiter = '|', value = {"1980|1.98k", "2000|2k", "1900|1.9k", "60|60", "999999|1m", "12345678|12.35m"})
 	void shortNumberTwoDecimals(double in, String expected) {
 		assertEquals(expected, Parse.shortNumber(in, 2));

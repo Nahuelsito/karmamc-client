@@ -3,54 +3,67 @@ package cl.karmamc.client;
 import java.util.ArrayDeque;
 
 /**
- * Auto-stop detector for `/fish afk start` (PLAN.md v1.1.1). Pure logic, fed once per client tick (20/s).
- * Rule A: 5+ input events within any 10 s window. Rule B: 10 s of continuous activity (gaps of at most 1 s).
- * Jump and sneak are never passed in, so they never count.
+ * AFK input detector (PLAN.md v1.1.2). Pure logic, fed once per client tick (20/s) while in a world.
+ * Input event = new press edge of a tracked key (holding counts once) or opening a screen (no screen -> screen).
+ * In a session: 5+ events within any 10 s window -> STOP (ignored for 2 s after a manual start).
+ * Outside a session: 5 min without events -> AUTO_START.
  */
 public final class AfkActivity {
 	// Held-key bits passed to tick().
-	public static final int ATTACK = 1, USE = 2, FORWARD = 4, BACK = 8, LEFT = 16, RIGHT = 32, SPRINT = 64;
-	// Sprint excluded: toggle-sprint keeps it held while standing still. Its press still counts for Rule A.
-	static final int MOVE = FORWARD | BACK | LEFT | RIGHT;
+	public static final int ATTACK = 1, USE = 2, FORWARD = 4, BACK = 8, LEFT = 16, RIGHT = 32, SPRINT = 64, JUMP = 128,
+			SNEAK = 256;
 
-	static final int GRACE_TICKS = 40, WINDOW_TICKS = 200, MAX_EVENTS = 5, CONTINUOUS_TICKS = 200, MAX_GAP_TICKS = 20;
-	static final int CAMERA_QUIET_TICKS = 10;
-	static final float CAMERA_DEGREES = 1f;
+	public enum Signal { NONE, STOP, AUTO_START }
 
-	private int tick = -1;
+	static final int GRACE_TICKS = 40, WINDOW_TICKS = 200, MAX_EVENTS = 5, IDLE_TICKS = 5 * 60 * 20;
+
+	private int tick;
 	private int prevKeys;
-	private boolean prevScreen = true; // the chat that ran the command is open: its closing never counts
+	private boolean prevScreen = true; // joining a world or the chat that ran a command: closing never counts
+	private int idleTicks;
+	private boolean session;
+	private int graceUntil;
 	private final ArrayDeque<Integer> events = new ArrayDeque<>();
-	private int lastCamera = Integer.MIN_VALUE / 2, runStart = -1, lastActive = Integer.MIN_VALUE / 2;
 
 	/**
 	 * @param keys bitmask of held keys (ATTACK, USE, FORWARD, ...)
-	 * @param cameraDegrees |yaw change| + |pitch change| this tick
 	 * @param screenOpen any screen (chat, inventory, container) is open
-	 * @return true when the session must stop
 	 */
-	public boolean tick(int keys, float cameraDegrees, boolean screenOpen) {
+	public Signal tick(int keys, boolean screenOpen) {
 		tick++;
-		int pressed = keys & ~prevKeys;
-		boolean opened = screenOpen && !prevScreen;
+		int count = Integer.bitCount(keys & ~prevKeys) + (screenOpen && !prevScreen ? 1 : 0);
 		prevKeys = keys;
 		prevScreen = screenOpen;
-		boolean camera = cameraDegrees > CAMERA_DEGREES;
-		// A camera event starts a gesture: movement after >= 0.5 s still, so one long sweep is one event (Rule B covers long sweeps).
-		boolean cameraEvent = camera && tick - lastCamera > CAMERA_QUIET_TICKS;
-		if (camera) lastCamera = tick;
-		if (tick < GRACE_TICKS) return false;
+		if (count > 0) idleTicks = 0;
+		else idleTicks++;
 
-		int count = Integer.bitCount(pressed) + (opened ? 1 : 0) + (cameraEvent ? 1 : 0);
+		if (!session) {
+			if (idleTicks < IDLE_TICKS) return Signal.NONE;
+			startSession(false);
+			return Signal.AUTO_START;
+		}
+		if (tick <= graceUntil) return Signal.NONE;
 		for (int i = 0; i < count; i++) events.add(tick);
 		while (!events.isEmpty() && events.peekFirst() <= tick - WINDOW_TICKS) events.removeFirst();
-		if (events.size() >= MAX_EVENTS) return true;
-
-		if ((keys & MOVE) != 0 || camera) {
-			if (runStart < 0 || tick - lastActive - 1 > MAX_GAP_TICKS) runStart = tick;
-			lastActive = tick;
-			return tick - runStart >= CONTINUOUS_TICKS;
-		}
-		return false;
+		return events.size() >= MAX_EVENTS ? Signal.STOP : Signal.NONE;
 	}
+
+	/** Session begins: manual (`/fish afk start`, 2 s grace) or auto (no grace). */
+	public void startSession(boolean grace) {
+		session = true;
+		graceUntil = grace ? tick + GRACE_TICKS : tick;
+		events.clear();
+	}
+
+	/** Session ended (any reason): the idle counter restarts from 0. */
+	public void endSession() {
+		session = false;
+		idleTicks = 0;
+	}
+
+	/** A non-key input (claim message): resets the idle counter. */
+	public void input() { idleTicks = 0; }
+
+	/** Ticks since the last input event. */
+	public int idleTicks() { return idleTicks; }
 }

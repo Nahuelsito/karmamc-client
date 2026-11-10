@@ -41,7 +41,9 @@ public class KarmaClient implements ClientModInitializer {
 		GemsTooltip.register();
 		GemShopTooltip.register();
 		ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
-			if (Parse.investUpgradeBought(MenuReader.strip(message))) onInvestUpgradeBought();
+			String line = MenuReader.strip(message);
+			if (Parse.investUpgradeBought(line)) onInvestUpgradeBought();
+			if (Parse.claim(line)) AfkSession.onClaim();
 		});
 		ClientTickEvents.END_CLIENT_TICK.register(mc -> {
 			MenuReader.tick(mc);

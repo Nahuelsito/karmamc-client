@@ -6,120 +6,142 @@ import static cl.karmamc.client.AfkActivity.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AfkActivityTest {
-	/** Detector already past the 2 s grace period. */
+	/** Detector in a manual session, already past the 2 s grace period. */
 	private static AfkActivity afterGrace() {
 		AfkActivity a = new AfkActivity();
-		run(a, 40, 0, 0);
+		a.startSession(true);
+		run(a, 40, 0);
 		return a;
 	}
 
-	/** Feeds n ticks; returns true if any of them stopped the session. */
-	private static boolean run(AfkActivity a, int n, int keys, float camera) {
-		boolean stop = false;
-		for (int i = 0; i < n; i++) stop |= a.tick(keys, camera, false);
-		return stop;
+	/** Feeds n ticks; returns the first non-NONE signal, or NONE. */
+	private static Signal run(AfkActivity a, int n, int keys) {
+		Signal out = Signal.NONE;
+		for (int i = 0; i < n; i++) {
+			Signal s = a.tick(keys, false);
+			if (out == Signal.NONE) out = s;
+		}
+		return out;
 	}
 
-	/** n clicks (1 tick down, 1 s apart). */
-	private static boolean clicks(AfkActivity a, int n) {
-		boolean stop = false;
-		for (int i = 0; i < n; i++) stop |= run(a, 1, ATTACK, 0) | run(a, 19, 0, 0);
-		return stop;
+	/** n taps of a key (1 tick down, 1 s apart). */
+	private static Signal taps(AfkActivity a, int n, int key) {
+		Signal out = Signal.NONE;
+		for (int i = 0; i < n; i++) {
+			Signal s = run(a, 1, key);
+			if (out == Signal.NONE) out = s;
+			s = run(a, 19, 0);
+			if (out == Signal.NONE) out = s;
+		}
+		return out;
 	}
 
 	@Test
 	void fiveClicksInTenSecondsStops() {
-		assertTrue(clicks(afterGrace(), 5));
+		assertEquals(Signal.STOP, taps(afterGrace(), 5, ATTACK));
 	}
 
 	@Test
-	void fourClicksInTenSecondsDoesNotStop() {
+	void fiveJumpTapsInTenSecondsStops() {
+		assertEquals(Signal.STOP, taps(afterGrace(), 5, JUMP));
+	}
+
+	@Test
+	void fourTapsInTenSecondsDoesNotStop() {
 		AfkActivity a = afterGrace();
-		assertFalse(clicks(a, 4));
-		assertFalse(run(a, 200, 0, 0));
-		assertFalse(clicks(a, 4)); // old clicks left the window
+		assertEquals(Signal.NONE, taps(a, 4, JUMP));
+		assertEquals(Signal.NONE, run(a, 200, 0));
+		assertEquals(Signal.NONE, taps(a, 4, SNEAK)); // old taps left the window
 	}
 
 	@Test
-	void holdingAttackOrUseDoesNotStop() {
-		assertFalse(run(afterGrace(), 15 * 20, ATTACK | USE, 0));
-	}
-
-	@Test
-	void jumpAndSneakAreNeverPassedSoIdleNeverStops() {
-		// KarmaClient never puts jump/sneak in the mask: holding them looks like an idle tick.
-		assertFalse(run(afterGrace(), 30 * 20, 0, 0));
-	}
-
-	@Test
-	void walkingTenSecondsStops() {
-		assertTrue(run(afterGrace(), 10 * 20 + 1, FORWARD, 0));
-	}
-
-	@Test
-	void toggleSprintHeldWhileStandingDoesNotStop() {
-		assertFalse(run(afterGrace(), 30 * 20, SPRINT, 0));
-	}
-
-	@Test
-	void walkingWithTwoSecondPauseDoesNotStop() {
-		AfkActivity a = afterGrace();
-		assertFalse(run(a, 8 * 20, FORWARD, 0));
-		assertFalse(run(a, 2 * 20, 0, 0));
-		assertFalse(run(a, 8 * 20, FORWARD, 0));
-	}
-
-	@Test
-	void walkingWithShortPausesIsContinuous() {
-		AfkActivity a = afterGrace();
-		assertFalse(run(a, 6 * 20, FORWARD, 0));
-		assertFalse(run(a, 10, 0, 0)); // 0.5 s gap does not reset
-		assertTrue(run(a, 5 * 20, FORWARD, 0));
-	}
-
-	@Test
-	void longMouseSweepCountsAsOneEvent() {
-		AfkActivity a = afterGrace();
-		assertFalse(run(a, 5 * 20, 0, 3f)); // 5 s sweep: one event, Rule B not reached
-		assertFalse(run(a, 30, 0, 0));
-		assertFalse(clicks(a, 3)); // sweep + 3 clicks = 4 events
-	}
-
-	@Test
-	void mouseSweepTenSecondsStops() {
-		assertTrue(run(afterGrace(), 10 * 20 + 1, 0, 3f));
-	}
-
-	@Test
-	void tinyCameraJitterIgnored() {
-		assertFalse(run(afterGrace(), 30 * 20, 0, 0.5f));
+	void holdingKeysDoesNotStop() {
+		assertEquals(Signal.NONE, run(afterGrace(), 15 * 20, ATTACK | USE));
+		assertEquals(Signal.NONE, run(afterGrace(), 30 * 20, FORWARD));
+		assertEquals(Signal.NONE, run(afterGrace(), 30 * 20, SPRINT | SNEAK)); // toggle-sprint/sneak report as held
 	}
 
 	@Test
 	void openingScreensCount() {
-		AfkActivity a = afterGrace();
-		boolean stop = false;
+		AfkActivity b = afterGrace();
+		Signal any = Signal.NONE;
 		for (int i = 0; i < 5; i++) {
-			stop |= a.tick(0, 0, true);
-			stop |= a.tick(0, 0, false);
+			Signal s = b.tick(0, true);
+			if (any == Signal.NONE) any = s;
+			b.tick(0, false);
 		}
-		assertTrue(stop);
+		assertEquals(Signal.STOP, any);
 	}
 
 	@Test
 	void gracePeriodIgnoresActivity() {
 		AfkActivity a = new AfkActivity();
-		boolean stop = false;
-		for (int i = 0; i < 39; i++) stop |= a.tick(i % 2 == 0 ? ATTACK : 0, 5f, i % 2 == 0);
-		assertFalse(stop);
-		assertFalse(run(a, 30 * 20, 0, 0));
+		a.startSession(true);
+		Signal any = Signal.NONE;
+		for (int i = 0; i < 40; i++) {
+			Signal s = a.tick(i % 2 == 0 ? ATTACK : 0, i % 2 == 0);
+			if (any == Signal.NONE) any = s;
+		}
+		assertEquals(Signal.NONE, any);
+		assertEquals(Signal.NONE, run(a, 30 * 20, 0));
 	}
 
 	@Test
 	void keyHeldThroughGraceIsNotANewPress() {
 		AfkActivity a = new AfkActivity();
-		run(a, 40, ATTACK, 0);
-		assertFalse(run(a, 30 * 20, ATTACK, 0));
+		a.startSession(true);
+		run(a, 40, ATTACK);
+		assertEquals(Signal.NONE, run(a, 30 * 20, ATTACK));
+	}
+
+	@Test
+	void idleFiveMinutesAutoStarts() {
+		AfkActivity a = new AfkActivity();
+		assertEquals(Signal.NONE, run(a, IDLE_TICKS - 1, 0));
+		assertEquals(Signal.AUTO_START, a.tick(0, false));
+		assertEquals(Signal.NONE, run(a, 30 * 20, 0)); // now in a session, no second start
+	}
+
+	@Test
+	void inputAtFourFiftyNineResets() {
+		AfkActivity a = new AfkActivity();
+		run(a, IDLE_TICKS - 20, 0);
+		assertEquals(Signal.NONE, run(a, 1, JUMP));
+		assertEquals(0, a.idleTicks());
+		assertEquals(Signal.NONE, run(a, IDLE_TICKS - 1, 0));
+		assertEquals(Signal.AUTO_START, a.tick(0, false));
+	}
+
+	@Test
+	void holdingKeysDoesNotResetIdle() {
+		AfkActivity a = new AfkActivity();
+		run(a, 1, FORWARD | ATTACK); // initial press resets
+		assertEquals(Signal.NONE, run(a, IDLE_TICKS - 1, FORWARD | ATTACK));
+		assertEquals(Signal.AUTO_START, a.tick(FORWARD | ATTACK, false));
+	}
+
+	@Test
+	void claimInputResetsIdle() {
+		AfkActivity a = new AfkActivity();
+		run(a, IDLE_TICKS - 1, 0);
+		a.input();
+		assertEquals(Signal.NONE, run(a, IDLE_TICKS - 1, 0));
+	}
+
+	@Test
+	void autoStartedSessionHasNoGraceAndStops() {
+		AfkActivity a = new AfkActivity();
+		run(a, IDLE_TICKS, 0);
+		assertEquals(Signal.STOP, taps(a, 5, ATTACK));
+	}
+
+	@Test
+	void sessionEndRestartsIdleFromZero() {
+		AfkActivity a = afterGrace();
+		run(a, IDLE_TICKS * 2, 0); // in a session: never auto-starts
+		a.endSession();
+		assertEquals(Signal.NONE, run(a, IDLE_TICKS - 1, 0));
+		assertEquals(Signal.AUTO_START, a.tick(0, false));
 	}
 
 	@Test

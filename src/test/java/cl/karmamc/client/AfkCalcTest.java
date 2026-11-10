@@ -30,9 +30,28 @@ class AfkCalcTest {
 	}
 
 	@Test
-	void auraProportional() {
-		// 1 Aura / 3h over 1.5h = 0.5; spawner line hidden with no spawners
-		assertEquals(List.of("Catfish69 QoL for KarmaMC — AFK 1.5h", "Dinero (invest + minions): $3.6k", "Gemas: 0.5", "Aura: 0.5"),
+	void gemsAndAuraWholeIntervals() {
+		// 1.5h: 90 whole minutes of gems (90 x 1/180 = 0.5), no whole 3h aura interval; spawner line hidden with no spawners
+		assertEquals(List.of("Catfish69 QoL for KarmaMC — AFK 1.5h", "Dinero (invest + minions): $3.6k", "Gemas: 0.5", "Aura: 0"),
 				plain(AfkCalc.lines("1.5h", 5400, null, 0.6667, 1.0 / 180, true, 1.0, Map.of(), null)));
+	}
+
+	private static String gems(double seconds) { return plain(AfkCalc.lines("", seconds, null, null, 2.0, true, 3.0, Map.of(), null)).get(2); }
+
+	private static String aura(double seconds) { return plain(AfkCalc.lines("", seconds, null, null, 2.0, true, 3.0, Map.of(), null)).get(3); }
+
+	@Test
+	void gemsCountOnlyFullMinutes() {
+		assertEquals("Gemas: 0", gems(59));
+		assertEquals("Gemas: 2", gems(90)); // 1 interval x 2
+		assertEquals("Gemas: 120", gems(3600)); // 60 intervals
+	}
+
+	@Test
+	void auraCountsOnlyFullThreeHours() {
+		assertEquals("Aura: 0", aura(2 * 3600 + 59 * 60));
+		assertEquals("Aura: 3", aura(3 * 3600)); // 1 interval x 3
+		assertEquals("Aura: 3", aura(5 * 3600 + 59 * 60));
+		assertEquals("Aura: 6", aura(6 * 3600));
 	}
 }

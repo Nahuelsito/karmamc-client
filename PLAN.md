@@ -114,7 +114,7 @@ Cada fase la construye un subagente; el líder audita (review + build + tests) a
   - `/fish aura on|off` — mostrar/ocultar Aura/h en el HUD.
   - `/fish spawnersetup` — Módulo 2.
   - `/fish tokenprices` — Módulo 3.
-  - `/fish afk calcular <tiempo>` (en v1.1.0 era `/fish afk <tiempo>`; renombrado en v1.1.1) — fase B: imprime en el chat (solo cliente) cuánto rinde cada moneda pasiva en ese tiempo. Tiempo: número con hasta 2 decimales + una unidad `s`/`m`/`h`/`d` (sin distinguir mayúsculas), p. ej. `1h`, `90m`, `1.5d`; inválido o sin argumento → mensaje rojo de uso. Cálculo proporcional (promedios, no intervalos completos), mismos datos que el HUD:
+  - `/fish afk calcular <tiempo>` (en v1.1.0 era `/fish afk <tiempo>`; renombrado en v1.1.1) — fase B: imprime en el chat (solo cliente) cuánto rinde cada moneda pasiva en ese tiempo. Tiempo: número con hasta 2 decimales + una unidad `s`/`m`/`h`/`d` (sin distinguir mayúsculas), p. ej. `1h`, `90m`, `1.5d`; inválido o sin argumento → mensaje rojo de uso. Cálculo proporcional (promedios, no intervalos completos), mismos datos que el HUD (desde v1.1.2 gemas y aura cuentan solo intervalos completos, ver v1.1.2):
     - Dinero (verde) = (invest/s + minions/s) × segundos.
     - Gemas (rosa) = gemas/60s × segundos/60.
     - Spawners (verde, solo si hay alguno) = spawners/h × segundos/3600.
@@ -130,9 +130,18 @@ Cada fase la construye un subagente; el líder audita (review + build + tests) a
   - `start` inicia la sesión (si ya hay una: aviso amarillo). `stop` la termina (si no hay: aviso amarillo).
   - Mientras está activa, el HUD agrega debajo de sus líneas `AFK 01:23:05` (tiempo transcurrido, se actualiza cada segundo) y las mismas líneas y colores que `/fish afk calcular` para ese tiempo (dinero, gemas, spawners si hay, aura si `/fish aura on`), recalculadas cada 2 s.
   - Al terminar (comando o auto-stop): desaparece la sección del HUD, el chat muestra `Catfish69 QoL for KarmaMC — AFK terminado <tiempo>` (dorado) + las líneas de `calcular`, y suena el level-up del jugador (solo local).
-  - Auto-stop por actividad (se ignora todo durante los primeros 2 s tras `start`):
-    - **Eventos**: nueva pulsación de atacar/usar, de una tecla de movimiento (adelante/atrás/izq/der) o sprint; abrir cualquier pantalla (transición sin pantalla → pantalla); empezar a mover la cámara (>1° en un tick tras ≥0.5 s quieta: un barrido largo cuenta como 1 evento).
-    - **Regla A**: 5 o más eventos en cualquier ventana de 10 s → stop.
-    - **Regla B**: 10 s de actividad continua → stop. Tick activo = tecla de movimiento/sprint mantenida o cámara movida (>1°). Una pausa de más de 1 s reinicia el conteo.
-    - No cuentan nunca: saltar o agacharse (pulsar o mantener), mantener atacar/usar (solo la pulsación inicial cuenta).
+  - Auto-stop por actividad: reemplazado en v1.1.2 (ver abajo). En v1.1.1 contaba también la cámara y había una Regla B (10 s de actividad continua); ambas se quitaron.
   - Desconexión o cambio de modalidad (nuevo mundo): la sesión termina y el resumen (+ sonido) se muestra al estar en el siguiente mundo.
+
+## v1.1.2
+- **Auto-stop de la sesión AFK, solo Regla A**: 5 o más eventos de entrada en cualquier ventana de 10 s → stop (resumen en chat + level-up). Se ignora todo durante los primeros 2 s tras `/fish afk start`.
+  - **Evento de entrada**: nueva pulsación (flanco, no mantener) de atacar, usar, adelante, atrás, izquierda, derecha, sprint, saltar o agacharse; o abrir cualquier pantalla (transición sin pantalla → pantalla).
+  - Mantener cualquier tecla/botón no detiene la sesión: solo la pulsación inicial cuenta una vez. Toggle-sprint/toggle-sneak se ven como mantenidos → solo cuenta el cambio de estado.
+  - La cámara ya no cuenta nunca. La Regla B (10 s de actividad continua) se eliminó.
+- **Fin por cobro**: los mensajes del servidor (chat de juego/sistema, sin formato) que empiezan con `[!] Cobraste ...` terminan la sesión por el mismo camino (HUD limpio, resumen, sonido). Ej.: `[!] Cobraste 619,423.00 $.` (invest), `[!] Cobraste $287.35K. Tus minions siguen trabajando.` (minions). Anclado al inicio: el chat de jugadores (con rango/nombre delante) nunca coincide. Sin sesión activa, un cobro reinicia el contador de inactividad.
+- **Auto-inicio**: sin sesión activa, estando en un mundo, 5 min sin eventos de entrada (misma definición; los cobros también reinician) → la sesión empieza sola con el contador ya en 05:00 (inicio = hora de la última entrada) y las estimaciones cubriendo esos 5 min. Chat amarillo: `AFK detectado (5 min). Sesión AFK iniciada; /fish afk stop para terminar.` Sin período de gracia.
+  - Al terminar cualquier sesión el contador de inactividad vuelve a 0. Fuera de un mundo (menú, carga) el contador se reinicia.
+- **Intervalos completos** en `/fish afk calcular` y en la sesión (HUD + resumen):
+  - Gemas = floor(segundos / 60) × gemas/60s. Ej.: 90 s → 1 intervalo; 1h → 60.
+  - Aura = floor(segundos / 10800) × aura/3h. Ej.: 2h59m → 0; 3h → 1×.
+  - Dinero y spawners siguen proporcionales.
